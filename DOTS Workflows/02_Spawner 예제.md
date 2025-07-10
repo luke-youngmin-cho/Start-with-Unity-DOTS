@@ -1,6 +1,6 @@
 # ECS 워크플로 빠른 시작 — **Spawner** 튜토리얼
 
-> 이 튜토리얼은 **엔티티 생성·컴포넌트 읽기/쓰기·런타임 인스턴스화** 과정을 통해 ECS 워크플로를 익히는 단계별 예제입니다. 전체 흐름은 아래 5가지 작업을 순서대로 수행합니다.fileciteturn10file4  
+> 이 튜토리얼은 **엔티티 생성·컴포넌트 읽기/쓰기·런타임 인스턴스화** 과정을 통해 ECS 워크플로를 익히는 단계별 예제입니다. 전체 흐름은 아래 5가지 작업을 순서대로 수행합니다.
 
 | 순서 | 작업 | 목표 |
 |------|------|------|
@@ -15,7 +15,7 @@
 ## 1. SubScene 만들기
 1. Hierarchy 우클릭 → **New Sub Scene ▸ Empty Scene** 선택 후 저장.  
 2. 또는 기존 GameObject를 선택하고 **New Sub Scene ▸ From Selection** 으로 변환.  
-3. 빈 GameObject에 **SubScene** 컴포넌트를 붙이고 *Scene Asset* 지정 시 기존 서브씬을 참조로 추가할 수 있습니다.fileciteturn10file4turn10file15  
+3. 빈 GameObject에 **SubScene** 컴포넌트를 붙이고 *Scene Asset* 지정 시 기존 서브씬을 참조로 추가할 수 있습니다.
 
 > **Tip** `Auto Load Scene` 체크를 켜 두면 Play 모드에서 자동 스트리밍됩니다.
 
@@ -75,7 +75,7 @@ class SpawnerBaker : Baker<SpawnerAuthoring>
 ### 3‑3 에디터 설정
 1. 서브씬에 빈 GameObject **Spawner** 생성.  
 2. **SpawnerAuthoring** 추가 후 *Prefab*·*Spawn Rate* 설정(예: 2초).  
-3. **Entities Hierarchy** 창을 *Runtime* 또는 *Mixed* 모드로 두면 베이킹된 Spawner 엔티티와 컴포넌트 값을 바로 확인할 수 있습니다.fileciteturn10file7  
+3. **Entities Hierarchy** 창을 *Runtime* 또는 *Mixed* 모드로 두면 베이킹된 Spawner 엔티티와 컴포넌트 값을 바로 확인할 수 있습니다.
 
 ---
 
@@ -189,7 +189,7 @@ public partial struct ProcessSpawnerJob : IJobEntity
 
 ## 6. 플레이 모드 확인
 * Play 모드 진입 시 **Prefab**이 설정한 주기로 생성되는지 Scene / Game 뷰에서 확인.  
-* `Entities Hierarchy` 창에 새 엔티티가 실시간으로 추가되는 것을 볼 수 있습니다.fileciteturn10file5  
+* `Entities Hierarchy` 창에 새 엔티티가 실시간으로 추가되는 것을 볼 수 있습니다.
 * 멀티스레딩 효과를 확인하려면 Spawner 오브젝트를 여러 개로 복제해 **한 번에 많은 스포너**를 실행해 보세요.
 
 ---
