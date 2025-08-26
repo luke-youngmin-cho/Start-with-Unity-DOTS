@@ -1,0 +1,12 @@
+# Claude configuration files
+.claude/
+claude.config.json
+claude.settings.json
+*.claude
+CLAUDE.md
+.claudeignore
+
+# Claude Code specific
+.claude-code/
+.claude-cache/
+.claude-session/
