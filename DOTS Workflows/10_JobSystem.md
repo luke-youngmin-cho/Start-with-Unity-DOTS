@@ -26,7 +26,7 @@ Unity의 **Job System**은 멀티코어 CPU를 활용하여 ECS 데이터를 �
 | `IJobParallelFor` | 인덱스 배열 | 정적 WorkStealing 분할 |
 | `IJobEntity` | ECS Entity | 소스 제너레이터가 `IJobChunk` 코드 생성 |
 | `IJobChunk` | Chunk 단위 | 로우레벨·최고 성능 (수작업 루프) |
-| `IJobForEach<T>` *(Obsolete)* | 엔티티 | `IJobEntity`로 교체 권장 |
+| `Entities.ForEach` *(Obsolete)* | 엔티티 | `IJobEntity`로 교체 권장 |
 
 ---
 

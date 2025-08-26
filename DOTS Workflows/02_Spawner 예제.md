@@ -105,6 +105,13 @@ public partial struct SpawnerSystem : ISystem
     {
         if (spawner.ValueRO.NextSpawnTime < SystemAPI.Time.ElapsedTime)
         {
+            // Prefab이 유효한지 확인
+            if (spawner.ValueRO.Prefab == Entity.Null)
+            {
+                UnityEngine.Debug.LogError("Spawner의 Prefab이 설정되지 않았습니다!");
+                return;
+            }
+
             Entity e = state.EntityManager.Instantiate(spawner.ValueRO.Prefab);
             state.EntityManager.SetComponentData(
                 e,
@@ -150,9 +157,9 @@ public partial struct OptimizedSpawnerSystem : ISystem
 
     EntityCommandBuffer.ParallelWriter GetEntityCommandBuffer(ref SystemState state)
     {
-        var ecbSingleton = SystemAPI.GetSingleton
-            <BeginSimulationEntityCommandBufferSystem.Singleton>();
-        var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
+        // BeginSimulationEntityCommandBufferSystem을 가져와서 ECB 생성
+        var ecbSystem = state.World.GetExistingSystemManaged<BeginSimulationEntityCommandBufferSystem>();
+        var ecb = ecbSystem.CreateCommandBuffer(state.WorldUnmanaged);
         return ecb.AsParallelWriter();
     }
 }
@@ -167,6 +174,10 @@ public partial struct ProcessSpawnerJob : IJobEntity
     {
         if (spawner.NextSpawnTime < ElapsedTime)
         {
+            // Prefab이 유효한지 확인
+            if (spawner.Prefab == Entity.Null)
+                return;
+
             Entity e = Ecb.Instantiate(chunkIndex, spawner.Prefab);
             Ecb.SetComponent(
                 chunkIndex, e,

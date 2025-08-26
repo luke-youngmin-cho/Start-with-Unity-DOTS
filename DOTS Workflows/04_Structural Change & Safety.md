@@ -44,8 +44,10 @@ public partial struct SpawnJob : IJobEntity
 }
 
 // 시스템 본문
-var ecb = _ecbSystem.CreateCommandBuffer(state.WorldUnmanaged)
-                    .AsParallelWriter();
+// ECB 시스템 참조 가져오기
+var ecbSystem = state.World.GetExistingSystemManaged<EndSimulationEntityCommandBufferSystem>();
+var ecb = ecbSystem.CreateCommandBuffer(state.WorldUnmanaged)
+                   .AsParallelWriter();
 new SpawnJob { Ecb = ecb }.ScheduleParallel();
 ```
 * **기록 단계**: 잡 내에서 `ParallelWriter` 로 StructuralChange 기록  

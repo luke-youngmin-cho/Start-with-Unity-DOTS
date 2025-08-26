@@ -31,7 +31,7 @@ partial struct SpawnJob : IJobEntity
     void Execute([ChunkIndexInQuery] int ciq, in SpawnRequest req)
     {
         Entity e = Ecb.Instantiate(ciq, Prefab);
-        Ecb.SetComponent(ciq, e, new Translation { Value = req.Position });
+        Ecb.SetComponent(ciq, e, new LocalTransform { Position = req.Position });
     }
 }
 

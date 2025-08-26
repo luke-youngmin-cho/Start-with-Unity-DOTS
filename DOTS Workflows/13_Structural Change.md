@@ -1,8 +1,8 @@
-# 구조 변경 & EntityCommandBuffer  
+# Structural Change & EntityCommandBuffer  
 ### EntityManager **직접 변경** vs **ECB 지연 변경** 패턴 비교
 
 Structural Change(구조 변경)은 엔티티의 Archetype 을 바꾸므로 **Chunk 재배치 + Sync Point** 비용이 발생합니다.  
-`EntityManager` 즉시 호출과 **EntityCommandBuffer(ECB)** 지연 변경의 차이를 이해하여, 필요한 비용만 지불하세요.
+`EntityManager` 즉시 호출과 **EntityCommandBuffer (ECB)** 지연 변경의 차이를 이해하여, 필요한 비용만 지불하세요.
 
 ---
 
@@ -97,4 +97,4 @@ new DestroyJob { Ecb = ecb }.ScheduleParallel();
 
 > **요약**  
 > *적은 양은 직방, 많은 양은 ECB.*  
-> 패턴을 맞추면 **프레임 스파이크** 없이 안정적으로 구조 변경을 처리할 수 있습니다.
+> 패턴을 맞추면 **프레임 스파이크** 없이 안정적으로 Structural Change을 처리할 수 있습니다.

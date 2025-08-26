@@ -74,6 +74,55 @@ partial struct BlinkJob : IJobEntity
 
 * `EnabledRefRW<T>` / `EnabledRefRO<T>` 는 Burst‑친화적이며 추가 메모리 복사 없이 **Enable Mask** 를 직접 수정·조회합니다.
 * 병렬 잡에서 동시에 같은 엔티티를 토글하지 않도록 쿼리를 분할하거나 단일 쓰레드 경로로 처리하세요.
+n### 4‑2 EnableMask 직접 처리 구체 예시
+
+#### IJobChunk에서 EnableMask 접근
+```csharp
+[BurstCompile]
+public struct EnableMaskProcessorJob : IJobChunk
+{
+    public ComponentTypeHandle<LocalTransform> TransformHandle;
+    [ReadOnly] public ComponentTypeHandle<Invisible> InvisibleHandle;
+
+    public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
+    {
+        var transforms = chunk.GetNativeArray(ref TransformHandle);
+        
+        // EnableMask 직접 접근
+        var enableMask = chunk.GetEnabledMask(ref InvisibleHandle);
+        
+        // 비트 마스크 순회 - 활성 엔티티만 처리
+        for (int i = 0; i < chunk.Count; i++)
+        {
+            if (enableMask[i])  // O(1) 비트 접근
+            {
+                var transform = transforms[i];
+                transform.Scale = 0.5f;  // 반투명 효과
+                transforms[i] = transform;
+            }
+        }
+    }
+}
+```
+
+#### 성능 비교: EnableMask vs StructuralChange
+```csharp
+// ❌ 비효율적: StructuralChange 방식 (Chunk 재배치)
+foreach (var entity in entities)
+{
+    if (shouldHide)
+        entityManager.AddComponent<Invisible>(entity);
+    else
+        entityManager.RemoveComponent<Invisible>(entity);
+}
+
+// ✅ 효율적: EnableMask 방식 (1비트 변경)
+foreach (var invisibleRef in SystemAPI.Query<EnabledRefRW<Invisible>>())
+{
+    invisibleRef.ValueRW = shouldHide;
+}
+```
+
 
 ---
 

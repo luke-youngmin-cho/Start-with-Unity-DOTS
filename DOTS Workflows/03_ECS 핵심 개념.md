@@ -21,6 +21,123 @@
     └─────── Index (Chunk 내 위치)
 ```
 
+### Entity Version 필드 활용 예시
+
+Entity의 Version 필드는 참조 무결성을 보장하고 오래된 참조를 감지하는 데 사용됩니다.
+
+#### 1-1 참조 유효성 검증
+```csharp
+partial struct ReferenceSystem : ISystem
+{
+    public void OnUpdate(ref SystemState state)
+    {
+        foreach (var (entityRef, transform) in 
+                 SystemAPI.Query<RefRO<EntityReference>, RefRW<LocalTransform>>())
+        {
+            Entity target = entityRef.ValueRO.Target;
+            
+            // Version을 통한 유효성 검사
+            if (!state.EntityManager.Exists(target))
+            {
+                // 참조된 Entity가 삭제됨 - 안전하게 처리
+                Debug.Log($"Invalid reference detected: {target}");
+                continue;
+            }
+            
+            // 안전한 컴포넌트 접근
+            if (state.EntityManager.HasComponent<LocalTransform>(target))
+            {
+                var targetPos = state.EntityManager.GetComponentData<LocalTransform>(target);
+                transform.ValueRW.Position = targetPos.Position;
+            }
+        }
+    }
+}
+```
+
+#### 1-2 Entity 캐싱과 Version 검증
+```csharp
+public partial struct EntityCacheSystem : ISystem, ISystemStartStop
+{
+    private Entity cachedTarget;
+    
+    public void OnStartRunning(ref SystemState state)
+    {
+        // 특정 Entity를 캐싱
+        cachedTarget = SystemAPI.GetSingletonEntity<PlayerTag>();
+    }
+    
+    public void OnUpdate(ref SystemState state)
+    {
+        // 캐싱된 Entity의 유효성 검증
+        if (cachedTarget == Entity.Null || !state.EntityManager.Exists(cachedTarget))
+        {
+            // 캐시 갱신 필요
+            var query = SystemAPI.QueryBuilder().WithAll<PlayerTag>().Build();
+            if (query.TryGetSingletonEntity<PlayerTag>(out cachedTarget))
+            {
+                Debug.Log($"Updated cached entity: {cachedTarget} (v{cachedTarget.Version})");
+            }
+        }
+        
+        // 캐싱된 Entity 사용
+        if (cachedTarget != Entity.Null)
+        {
+            var playerPos = state.EntityManager.GetComponentData<LocalTransform>(cachedTarget);
+            // 플레이어 위치 기반 로직...
+        }
+    }
+    
+    public void OnStopRunning(ref SystemState state) { }
+}
+```
+
+#### 1-3 Entity 생명주기 추적
+```csharp
+[System.Serializable]
+public struct EntityTracker : IComponentData
+{
+    public Entity TrackedEntity;
+    public int LastKnownVersion;  // Version 추적
+}
+
+partial struct EntityTrackingSystem : ISystem
+{
+    public void OnUpdate(ref SystemState state)
+    {
+        foreach (var (tracker, entity) in 
+                 SystemAPI.Query<RefRW<EntityTracker>>().WithEntityAccess())
+        {
+            var currentEntity = tracker.ValueRO.TrackedEntity;
+            
+            if (state.EntityManager.Exists(currentEntity))
+            {
+                int currentVersion = currentEntity.Version;
+                
+                // Version 변화 감지 (재생성 확인)
+                if (currentVersion != tracker.ValueRO.LastKnownVersion)
+                {
+                    tracker.ValueRW.LastKnownVersion = currentVersion;
+                    Debug.Log($"Entity {currentEntity.Index} was recreated (v{currentVersion})");
+                }
+            }
+            else
+            {
+                // Entity 삭제됨
+                Debug.Log($"Tracked entity {currentEntity} no longer exists");
+                tracker.ValueRW.TrackedEntity = Entity.Null;
+                tracker.ValueRW.LastKnownVersion = 0;
+            }
+        }
+    }
+}
+```
+
+> **Version 필드 활용 원칙**
+> 1. **Entity.Exists()** 체크로 참조 유효성 확인
+> 2. **Version 비교**로 Entity 재생성 감지
+> 3. **캐싱된 Entity 참조**의 무결성 보장
+
 ---
 
 ## 2. Component (컴포넌트)
@@ -93,9 +210,46 @@ PresentationSystemGroup
 └───────────────────────────────┘
 ```
 
+#### SoA 메모리 배치의 캐시 최적화
+
+**실제 메모리 구조 (Position + Velocity Archetype)**
+```text
+┌─────────── Chunk Header (64-128B) ───────────┐
+│ Entity Count | Enable Masks | Version Info  │
+├─────────────── Component Arrays ─────────────┤
+│ Position[0] Position[1] ... Position[N]     │ ← 연속 배치
+│ Velocity[0] Velocity[1] ... Velocity[N]     │ ← 연속 배치
+│ DynamicBuffer 포인터들 (필요 시)              │
+└──────────────────────────────────────────────┘
+
+메모리 주소 예시:
+Position[0]: 0x1000  Position[1]: 0x100C  Position[2]: 0x1018
+Velocity[0]: 0x2000  Velocity[1]: 0x200C  Velocity[2]: 0x2018
+         ↑ 동일 컴포넌트끼리 연속 메모리 (SIMD 최적화 가능)
+```
+
+**IJobChunk에서 직접 SoA 접근**
+```csharp
+public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
+{
+    var positions = chunk.GetNativeArray(ref positionHandle);
+    var velocities = chunk.GetNativeArray(ref velocityHandle);
+    
+    // 캐시 친화적: 동일 타입 배열을 순차적으로 처리
+    for (int i = 0; i < chunk.Count; i++)
+    {
+        positions[i] = new LocalTransform
+        {
+            Position = positions[i].Position + velocities[i].Value
+        };
+    }
+}
+```
+
 > **성능 원칙**  
 > 1. **연속 메모리 접근** → 캐시 효율 극대화  
-> 2. **Query** 는 Archetype 단위로 필터링 → 불필요한 검사 최소화
+> 2. **SIMD 벡터화** → 4~8개 요소 동시 처리 가능
+> 3. **Query** 는 Archetype 단위로 필터링 → 불필요한 검사 최소화
 
 ---
 

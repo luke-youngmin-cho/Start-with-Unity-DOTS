@@ -88,25 +88,42 @@ public partial struct MoveSystemIS : ISystem
 
 | 주제 | SystemBase | ISystem |
 |------|------------|---------|
-| **멤버 필드** | 자유롭게 추가 (GC Heap) | 불가 |
-| **저장 방식** | `this.field` | `SystemState`의 `Entity`에 **Component/Singleton** 저장 |
+| **멤버 필드** | 자유롭게 추가 (GC Heap) | Unmanaged 타입만 가능 (struct 필드) |
+| **저장 방식** | `this.field` | 구조체 필드 또는 **Singleton Component** 저장 |
 | **인스펙터 노출** | Entities Debugger에서 필드 확인 불가 | 동일 (필드가 없으므로) |
 
 ### 3‑1 ISystem에서 상태 저장 예시
 ```csharp
-public struct TickCounter : IComponentData { public int Value; }
-
-public void OnCreate(ref SystemState state)
+// ISystem에서는 구조체 내부에 필드를 직접 저장할 수 있습니다
+[BurstCompile]
+public partial struct MoveSystemWithState : ISystem
 {
-    state.EntityManager.AddComponentData(state.SystemHandle,
-        new TickCounter { Value = 0 });
+    // 상태를 구조체 필드로 저장 (Unmanaged 타입만 가능)
+    private Unity.Mathematics.Random random;
+    private float elapsedTime;
+    
+    public void OnCreate(ref SystemState state)
+    {
+        // 구조체 필드 초기화
+        random = new Unity.Mathematics.Random(1);
+        elapsedTime = 0f;
+    }
+
+    public void OnUpdate(ref SystemState state)
+    {
+        // 구조체 필드 사용
+        elapsedTime += SystemAPI.Time.DeltaTime;
+        
+        // 복잡한 상태가 필요한 경우 Singleton 컴포넌트 사용
+        // 예: SystemAPI.GetSingletonRW<GameState>()
+    }
 }
 
-public void OnUpdate(ref SystemState state)
-{
-    ref var counter = ref
-      state.EntityManager.GetComponentDataRW<TickCounter>(state.SystemHandle).ValueRW;
-    counter.Value++;
+// 또는 Singleton Component를 활용한 상태 관리
+public struct SystemState : IComponentData 
+{ 
+    public int TickCount;
+    public float AccumulatedTime;
 }
 ```
 
@@ -149,15 +166,226 @@ public void OnUpdate(ref SystemState state)
 
 ---
 
-## 8. 마이그레이션 팁
+## 8. SystemBase → ISystem 단계별 전환 가이드
 
-| 단계 | 작업 |
-|------|------|
-| ① | `SystemBase` 코드 분석 → 외부 상태(필드) 의존 제거 |
-| ② | 필드 → Singleton Component 로 이전 |
-| ③ | `OnUpdate` 로직을 `ISystem` 형식으로 복사 & `SystemAPI` 활용 |
-| ④ | `[BurstCompile]` 추가, Profiler 로 성능 비교 |
-| ⑤ | 남은 Managed API 사용 여부 확인 후 대체 |
+### 8-1 전환 준비 단계
+
+#### 1단계: 기존 SystemBase 코드 분석
+```csharp
+// 기존 SystemBase 코드 예시
+public partial class WeaponSystem : SystemBase
+{
+    private float lastShotTime;          // 상태 필드 1
+    private Dictionary<Entity, float> cooldowns; // 상태 필드 2
+    private Random random;               // 상태 필드 3
+
+    protected override void OnCreate()
+    {
+        random = new Random(42);
+        cooldowns = new Dictionary<Entity, float>();
+    }
+
+    protected override void OnUpdate()
+    {
+        float currentTime = Time.ElapsedTime;
+        
+        // UnityEngine API 사용
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            FireWeapon(currentTime);
+        }
+    }
+
+    private void FireWeapon(float time)
+    {
+        // 복잡한 상태 의존 로직...
+    }
+}
+```
+
+#### 2단계: 상태 분석 및 Singleton Component 생성
+```csharp
+// 상태를 Singleton Component로 분리
+public struct WeaponSystemState : IComponentData
+{
+    public float LastShotTime;
+    public Unity.Mathematics.Random Random;
+}
+
+public struct WeaponCooldown : IComponentData
+{
+    public float CooldownTime;
+    public float LastFireTime;
+}
+```
+
+#### 3단계: ISystem으로 기본 변환
+```csharp
+[BurstCompile]
+public partial struct WeaponSystemIS : ISystem
+{
+    public void OnCreate(ref SystemState state)
+    {
+        // Singleton 엔티티 생성
+        var systemStateEntity = state.EntityManager.CreateEntity();
+        state.EntityManager.AddComponentData(systemStateEntity, new WeaponSystemState
+        {
+            LastShotTime = 0f,
+            Random = new Unity.Mathematics.Random(42)
+        });
+    }
+
+    public void OnUpdate(ref SystemState state)
+    {
+        // Singleton 상태 접근
+        var weaponState = SystemAPI.GetSingletonRW<WeaponSystemState>();
+        float currentTime = (float)SystemAPI.Time.ElapsedTime;
+
+        // TODO: Input 처리는 별도 시스템으로 분리 필요
+        
+        // 쿼리로 쿨다운 처리
+        foreach (var (cooldown, entity) in 
+                 SystemAPI.Query<RefRW<WeaponCooldown>>().WithEntityAccess())
+        {
+            if (currentTime - cooldown.ValueRO.LastFireTime >= cooldown.ValueRO.CooldownTime)
+            {
+                // 발사 로직
+                FireWeapon(ref weaponState.ValueRW, cooldown.ValueRW, currentTime);
+            }
+        }
+    }
+
+    private void FireWeapon(ref WeaponSystemState state, RefRW<WeaponCooldown> cooldown, float time)
+    {
+        state.LastShotTime = time;
+        cooldown.ValueRW.LastFireTime = time;
+        // 추가 발사 로직...
+    }
+}
+```
+
+### 8-2 고급 전환 패턴
+
+#### 복잡한 상태 관리: Entity Storage Pattern
+```csharp
+// 복잡한 상태는 별도 Entity에 저장
+[BurstCompile]
+public partial struct ComplexSystemIS : ISystem
+{
+    private Entity systemDataEntity;
+
+    public void OnCreate(ref SystemState state)
+    {
+        systemDataEntity = state.EntityManager.CreateEntity();
+        
+        // 복잡한 데이터 구조도 Component로 저장 가능
+        state.EntityManager.AddBuffer<StateBuffer>(systemDataEntity);
+        state.EntityManager.AddComponentData(systemDataEntity, new SystemConfig
+        {
+            MaxEntities = 1000,
+            UpdateRate = 60f
+        });
+    }
+
+    public void OnUpdate(ref SystemState state)
+    {
+        // SystemState를 통해 저장된 Entity 참조
+        if (!state.EntityManager.Exists(systemDataEntity))
+            return;
+
+        var config = state.EntityManager.GetComponentData<SystemConfig>(systemDataEntity);
+        var stateBuffer = state.EntityManager.GetBuffer<StateBuffer>(systemDataEntity);
+        
+        // 복잡한 로직 수행...
+    }
+}
+```
+
+#### Managed API 의존성 분리
+```csharp
+// 입력 처리를 별도 SystemBase로 분리
+public partial class InputSystem : SystemBase
+{
+    protected override void OnUpdate()
+    {
+        // UnityEngine Input API 사용
+        bool firePressed = Input.GetKeyDown(KeyCode.Space);
+        
+        if (firePressed)
+        {
+            // 입력 이벤트를 Component로 전달
+            var inputEntity = GetSingletonEntity<PlayerInputSingleton>();
+            EntityManager.AddComponent<FireInputEvent>(inputEntity);
+        }
+    }
+}
+
+// 실제 게임플레이 로직은 ISystem
+[BurstCompile]
+public partial struct WeaponFireSystem : ISystem
+{
+    public void OnUpdate(ref SystemState state)
+    {
+        // 입력 이벤트 체크
+        foreach (var (fireEvent, entity) in 
+                 SystemAPI.Query<RefRO<FireInputEvent>>().WithEntityAccess())
+        {
+            // 발사 로직 수행
+            ProcessWeaponFire(ref state);
+            
+            // 이벤트 제거
+            state.EntityManager.RemoveComponent<FireInputEvent>(entity);
+        }
+    }
+
+    private void ProcessWeaponFire(ref SystemState state)
+    {
+        // Burst-compiled 발사 로직...
+    }
+}
+```
+
+### 8-3 전환 검증 체크리스트
+
+#### 컴파일 및 실행 확인
+- [ ] `[BurstCompile]` 어트리뷰트 추가 후 컴파일 에러 없음
+- [ ] `SystemAPI` 사용으로 모든 쿼리·시간·싱글톤 접근 변환
+- [ ] UnityEngine API 사용 부분을 별도 SystemBase로 분리
+- [ ] 모든 상태 필드를 Singleton Component 또는 구조체 필드로 이전
+
+#### 성능 측정 및 비교
+```csharp
+// 성능 측정 유틸리티
+[BurstCompile]
+public partial struct PerformanceMeasureSystem : ISystem
+{
+    private long lastMeasureTime;
+
+    public void OnUpdate(ref SystemState state)
+    {
+        long startTime = System.Diagnostics.Stopwatch.GetTimestamp();
+        
+        // 측정하고자 하는 시스템 로직...
+        
+        long endTime = System.Diagnostics.Stopwatch.GetTimestamp();
+        float elapsedMs = (endTime - startTime) / (float)System.Diagnostics.Stopwatch.Frequency * 1000f;
+        
+        // Unity Profiler에서 확인 가능
+        Unity.Profiling.ProfilerUnsafeUtility.BeginSample("SystemPerformance");
+        // 결과 기록...
+        Unity.Profiling.ProfilerUnsafeUtility.EndSample();
+    }
+}
+```
+
+### 8-4 일반적인 전환 문제와 해결책
+
+| 문제 | 원인 | 해결책 |
+|------|------|--------|
+| **Burst 컴파일 실패** | Managed 타입 참조 | `[BurstDiscard]` 또는 별도 SystemBase로 분리 |
+| **상태 손실** | 구조체 필드 초기화 누락 | `OnCreate`에서 명시적 초기화 |
+| **싱글톤 접근 실패** | 싱글톤 Entity 생성 누락 | `OnCreate`에서 싱글톤 생성 확인 |
+| **성능 저하** | 과도한 구조체 복사 | `ref` 파라미터 사용 |
 
 ---
 

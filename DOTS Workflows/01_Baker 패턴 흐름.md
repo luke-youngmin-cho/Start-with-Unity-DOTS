@@ -83,6 +83,12 @@ public struct RotationSpeed : IComponentData
     public float RadiansPerSecond;
 }
 
+// Additional Component 정의
+public struct AdditionalEntity : IComponentData
+{
+    public int SomeValue;
+}
+
 // Baker
 public class SimpleBaker : Baker<RotationSpeedAuthoring>
 {
@@ -98,7 +104,7 @@ public class SimpleBaker : Baker<RotationSpeedAuthoring>
 
         // 2) 추가 Entity 생성 & 컴포넌트 부착 (선택)
         var child = CreateAdditionalEntity(TransformUsageFlags.Dynamic, "Child");
-        AddComponent(child, new Additional { SomeValue = 123 });
+        AddComponent(child, new AdditionalEntity { SomeValue = 123 });
     }
 }
 ```
