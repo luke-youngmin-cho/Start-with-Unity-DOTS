@@ -4,14 +4,14 @@ A manual that summarizes the core concepts, workflows, and optimizations of **Un
 
 > **Project Environment:** Unity **6000.5.0b2** · Entities **6.5.0** · Collections / Mathematics / Entities Graphics (Core Packages)
 
-> Looking for the older Entities 1.4 version of this manual? See the [`legacy/entities-1.4`](https://github.com/luke-youngmin-cho/Start-with-Unity-DOTS/tree/legacy/entities-1.4) branch.
+> Looking for the older Entities 1.4 version of this manual? See the [`legacy/entities-1.4`](https://github.com/luke-youngmin-cho/unity-dots-manual/tree/legacy/entities-1.4) branch.
 
 ---
 
 ## 📂 Folder Structure
 
 ```
-Start-with-Unity-DOTS/
+unity-dots-manual/
 ├─ Getting Started/
 │  ├─ 01_Environment Setup (Unity 6000.5 + Entities 6.5.0).md
 │  ├─ 02_Core Packages Explained.md
