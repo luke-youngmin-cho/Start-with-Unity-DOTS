@@ -1,10 +1,12 @@
-# Start-with-Unity DOTS 📚
+# Unity DOTS Manual 📚
 
-A manual that summarizes the core concepts, workflows, and optimizations of **Unity DOTS** (Data-Oriented Technology Stack), targeting the latest **Entities 6.5.0** on **Unity 6000.5+**.
+A community manual for **Unity DOTS** (Data-Oriented Technology Stack) — concepts, workflows, optimizations, and 1.x → 6.5 migration. Targets **Entities 6.5.0** on **Unity 6000.5+**.
 
 > **Project Environment:** Unity **6000.5.0b2** · Entities **6.5.0** · Collections / Mathematics / Entities Graphics (Core Packages)
 
 > Looking for the older Entities 1.4 version of this manual? See the [`legacy/entities-1.4`](https://github.com/luke-youngmin-cho/unity-dots-manual/tree/legacy/entities-1.4) branch.
+
+> 🤖 Working with an AI coding agent in this repo? See [`AGENTS.md`](AGENTS.md) for version targets, style rules, and code conventions.
 
 ---
 
