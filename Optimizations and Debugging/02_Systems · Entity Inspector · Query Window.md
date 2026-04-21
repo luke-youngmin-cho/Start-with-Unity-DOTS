@@ -1,3 +1,9 @@
+---
+title: Systems · Entity Inspector · Query Window
+updated: 2026-04-21
+folder: Optimizations and Debugging
+---
+
 # Systems · Entity Inspector · Query Window
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -13,7 +19,7 @@ The three Entities tooling windows you'll live in:
 | **Systems** | `Window → Entities → Systems` | "What systems are running, in what order, and how long do they take?" |
 | **Query** | `Window → Entities → Query` | "Given a component set, which entities match? Which systems query it?" |
 
-A fourth, **Archetypes** (`Window → Entities → Archetypes`), is covered in [`01_Chunk Layout & TypeManager.md`](01_Chunk%20Layout%20%26%20TypeManager.md).
+A fourth, **Archetypes** (`Window → Entities → Archetypes`), is covered in [`01_Chunk Layout & TypeManager.md`](01_Chunk Layout & TypeManager.md).
 
 ---
 

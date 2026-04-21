@@ -1,3 +1,9 @@
+---
+title: Structural Change & Safety
+updated: 2026-04-21
+folder: DOTS Workflows
+---
+
 # Structural Change & Safety
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -40,7 +46,7 @@ The Safety System catches most of these with an `InvalidOperationException` in t
 
 Two compliant patterns, in order of preference:
 
-1. **Use an `EntityCommandBuffer`.** Record the operation during iteration, play it back after. See [`14_EntityCommandBuffer · Deferred Entity.md`](14_EntityCommandBuffer%20%C2%B7%20Deferred%20Entity.md).
+1. **Use an `EntityCommandBuffer`.** Record the operation during iteration, play it back after. See [`14_EntityCommandBuffer · Deferred Entity.md`](14_EntityCommandBuffer · Deferred Entity.md).
 2. **Iterate into a `NativeList<Entity>`, then mutate after the loop.** Simpler for small cases; no ECB overhead.
 
 Example of pattern 2:
@@ -63,7 +69,7 @@ state.EntityManager.DestroyEntity(toKill.AsArray());
 
 ## 4. Enableable components — the escape hatch
 
-If you find yourself adding and removing a component every frame, it should almost certainly be an **enableable component** instead — toggling the enable bit is **not** structural. See [`06_Enableable Component.md`](06_Enableable%20Component.md).
+If you find yourself adding and removing a component every frame, it should almost certainly be an **enableable component** instead — toggling the enable bit is **not** structural. See [`06_Enableable Component.md`](06_Enableable Component.md).
 
 ---
 
@@ -136,5 +142,5 @@ Tactics:
 | `InvalidOperationException: … invalidated …` during foreach | Structural change inside the loop. Move to an ECB or buffer-then-apply. |
 | Entities silently disappear | `DestroyEntity` happened but other systems still hold the old `Entity` handle. Check handles with `EntityManager.Exists`. |
 | Add/Remove pattern churns frame time | Replace with enableable components. |
-| `RemoveComponent` triggers "cleanup component present" error | The entity has a cleanup component. Handle cleanup first (see [`05_Component Types.md`](05_Component%20Types.md)). |
+| `RemoveComponent` triggers "cleanup component present" error | The entity has a cleanup component. Handle cleanup first (see [`05_Component Types.md`](05_Component Types.md)). |
 | Shared component value set explodes (hundreds of distinct values) | The value is too granular. Bucket it (e.g. rounded to the nearest N) or store the variable piece as a regular component. |

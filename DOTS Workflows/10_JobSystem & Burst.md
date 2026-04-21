@@ -1,3 +1,9 @@
+---
+title: JobSystem & Burst
+updated: 2026-04-21
+folder: DOTS Workflows
+---
+
 # JobSystem & Burst
 ### Unity 6000.5 · Entities 6.5.0
 

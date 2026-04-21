@@ -1,3 +1,9 @@
+---
+title: Component Types
+updated: 2026-04-21
+folder: DOTS Workflows
+---
+
 # Component Types
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -142,7 +148,7 @@ Typical use: precomputed data that applies to all entities in the chunk (bounds,
 
 ## 9. Enableable components (`IEnableableComponent`)
 
-See the dedicated page [`06_Enableable Component.md`](06_Enableable%20Component.md) for depth. Summary here: a component that can be toggled on/off per entity **without** a structural change, via a per-chunk bitmask.
+See the dedicated page [`06_Enableable Component.md`](06_Enableable Component.md) for depth. Summary here: a component that can be toggled on/off per entity **without** a structural change, via a per-chunk bitmask.
 
 ```csharp
 public struct Stunned : IComponentData, IEnableableComponent

@@ -1,3 +1,9 @@
+---
+title: EntityId Audit — Deprecated InstanceID Hunt
+updated: 2026-04-21
+folder: Optimizations and Debugging
+---
+
 # EntityId Audit — Deprecated InstanceID Hunt
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -9,7 +15,7 @@ Unity 6000.3 introduced `EntityId` and began marking `InstanceID` APIs obsolete.
 
 So the practical question on 6000.5 is not "does my code still run" — it's "where are the deprecation warnings, and which ones will break when I bump to 6000.6". This page is the checklist for finding those.
 
-Background on the type itself is in [`DOTS Workflows/04_Identity Types — Entity · EntityId · UnityObjectRef.md`](../DOTS%20Workflows/04_Identity%20Types%20%E2%80%94%20Entity%20%C2%B7%20EntityId%20%C2%B7%20UnityObjectRef.md). The step-by-step migration is in [`Migration/03_InstanceID → EntityId.md`](../Migration/03_InstanceID%20%E2%86%92%20EntityId.md). Use this page as the "find all the broken places" companion.
+Background on the type itself is in [`DOTS Workflows/04_Identity Types — Entity · EntityId · UnityObjectRef.md`](../DOTS Workflows/04_Identity Types — Entity · EntityId · UnityObjectRef.md). The step-by-step migration is in [`Migration/03_InstanceID → EntityId.md`](../Migration/03_InstanceID → EntityId.md). Use this page as the "find all the broken places" companion.
 
 ---
 

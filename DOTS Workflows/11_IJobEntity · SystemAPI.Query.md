@@ -1,3 +1,9 @@
+---
+title: IJobEntity · SystemAPI.Query
+updated: 2026-04-21
+folder: DOTS Workflows
+---
+
 # IJobEntity · SystemAPI.Query
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -133,7 +139,7 @@ void Execute(Entity entity, ref Health health) { /* ... */ }
 
 ### Chunk index / `[ChunkIndexInQuery]`
 
-Useful when pairing with a `ParallelWriter` ECB for deterministic playback — pass the chunk index as the `sortKey`. See [`15_ParallelWriter · Deterministic Playback.md`](15_ParallelWriter%20%C2%B7%20Deterministic%20Playback.md).
+Useful when pairing with a `ParallelWriter` ECB for deterministic playback — pass the chunk index as the `sortKey`. See [`15_ParallelWriter · Deterministic Playback.md`](15_ParallelWriter · Deterministic Playback.md).
 
 ```csharp
 void Execute([ChunkIndexInQuery] int chunkIndex, in Health health, Entity entity)
@@ -151,9 +157,9 @@ void Execute([ChunkIndexInQuery] int chunkIndex, in Health health, Entity entity
 |-----------|------|
 | Tens to hundreds of entities, trivial math | `SystemAPI.Query` |
 | Thousands+ of entities, independent per-entity work | `IJobEntity.ScheduleParallel` |
-| Per-chunk work (bounds, sums, spatial partitioning) | **`IJobChunk`** — see [`12_IJobEntity vs IJobChunk.md`](12_IJobEntity%20vs%20IJobChunk.md) |
+| Per-chunk work (bounds, sums, spatial partitioning) | **`IJobChunk`** — see [`12_IJobEntity vs IJobChunk.md`](12_IJobEntity vs IJobChunk.md) |
 | Need managed API inside the loop | `SystemAPI.Query` from a `SystemBase` |
-| Need deferred structural changes | Either form, but write via `EntityCommandBuffer.ParallelWriter` — see [`14_EntityCommandBuffer · Deferred Entity.md`](14_EntityCommandBuffer%20%C2%B7%20Deferred%20Entity.md) |
+| Need deferred structural changes | Either form, but write via `EntityCommandBuffer.ParallelWriter` — see [`14_EntityCommandBuffer · Deferred Entity.md`](14_EntityCommandBuffer · Deferred Entity.md) |
 
 ---
 

@@ -1,3 +1,9 @@
+---
+title: InstanceID → EntityId Migration
+updated: 2026-04-21
+folder: Migration
+---
+
 # InstanceID → EntityId Migration
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -5,7 +11,7 @@
 
 ## 1. What changes, and when
 
-`EntityId` is a Unity Editor–level replacement for `UnityEngine.Object.GetInstanceID()`. It is **not** the ECS `Entity` struct — see [`../DOTS Workflows/04_Identity Types — Entity · EntityId · UnityObjectRef.md`](../DOTS%20Workflows/04_Identity%20Types%20%E2%80%94%20Entity%20%C2%B7%20EntityId%20%C2%B7%20UnityObjectRef.md) for the three-way distinction (`Entity` / `EntityId` / `UnityObjectRef<T>`).
+`EntityId` is a Unity Editor–level replacement for `UnityEngine.Object.GetInstanceID()`. It is **not** the ECS `Entity` struct — see [`../DOTS Workflows/04_Identity Types — Entity · EntityId · UnityObjectRef.md`](../DOTS Workflows/04_Identity Types — Entity · EntityId · UnityObjectRef.md) for the three-way distinction (`Entity` / `EntityId` / `UnityObjectRef<T>`).
 
 Timeline on the Editor track:
 
@@ -26,7 +32,7 @@ Key things you can no longer rely on:
 - Sorting to imply creation order — `EntityId` is versioned and reusable.
 - Bit packing.
 
-This page is the step-by-step refactor. The "find everything to fix" companion is [`../Optimizations and Debugging/04_EntityId Audit — Deprecated InstanceID Hunt.md`](../Optimizations%20and%20Debugging/04_EntityId%20Audit%20%E2%80%94%20Deprecated%20InstanceID%20Hunt.md).
+This page is the step-by-step refactor. The "find everything to fix" companion is [`../Optimizations and Debugging/04_EntityId Audit — Deprecated InstanceID Hunt.md`](../Optimizations and Debugging/04_EntityId Audit — Deprecated InstanceID Hunt.md).
 
 ---
 
@@ -171,13 +177,13 @@ AddComponent(entity, new VFXRef
 });
 ```
 
-See [`../DOTS Workflows/04_Identity Types — Entity · EntityId · UnityObjectRef.md`](../DOTS%20Workflows/04_Identity%20Types%20%E2%80%94%20Entity%20%C2%B7%20EntityId%20%C2%B7%20UnityObjectRef.md) for the full `UnityObjectRef<T>` surface.
+See [`../DOTS Workflows/04_Identity Types — Entity · EntityId · UnityObjectRef.md`](../DOTS Workflows/04_Identity Types — Entity · EntityId · UnityObjectRef.md) for the full `UnityObjectRef<T>` surface.
 
 ---
 
 ## 5. Verifying the refactor
 
-1. **Grep for leftover calls** — the patterns in [`../Optimizations and Debugging/04_EntityId Audit — Deprecated InstanceID Hunt.md`](../Optimizations%20and%20Debugging/04_EntityId%20Audit%20%E2%80%94%20Deprecated%20InstanceID%20Hunt.md).
+1. **Grep for leftover calls** — the patterns in [`../Optimizations and Debugging/04_EntityId Audit — Deprecated InstanceID Hunt.md`](../Optimizations and Debugging/04_EntityId Audit — Deprecated InstanceID Hunt.md).
 2. **Treat warnings as errors** — any remaining `GetInstanceID()` calls show up as deprecation warnings.
 3. **Exercise save/load** — if you migrated persisted IDs, verify old saves either still work or fail loudly.
 4. **Run unit tests** that previously keyed on `int` IDs. If they were relying on a stable numeric value, rewrite them around `EntityId` or around your new stable-id scheme.

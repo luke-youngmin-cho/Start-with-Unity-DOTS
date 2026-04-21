@@ -1,3 +1,9 @@
+---
+title: Spawner Example
+updated: 2026-04-21
+folder: DOTS Workflows
+---
+
 # Spawner Example
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -11,7 +17,7 @@ A spawner is a single entity that creates more entities — at startup, on a tim
 - Storing a **prefab entity** reference (baked from a GameObject prefab).
 - Instantiating it at runtime through an **EntityCommandBuffer** so structural changes happen safely.
 
-Reading [`01_Baker Pattern & SubScene.md`](01_Baker%20Pattern%20%26%20SubScene.md) first will make this easier.
+Reading [`01_Baker Pattern & SubScene.md`](01_Baker Pattern & SubScene.md) first will make this easier.
 
 ---
 
@@ -129,7 +135,7 @@ What matters:
 
 - `RequireForUpdate<Spawner>()` skips the system entirely when no spawner exists.
 - The `EndSimulationEntityCommandBufferSystem` singleton provides a shared ECB that flushes at end-of-frame — safer than mutating through `EntityManager` mid-loop.
-- `ecb.Instantiate(prefab)` creates a **deferred entity**; `ecb.SetComponent(instance, …)` schedules component writes on it. The `instance` handle is only valid inside this ECB's playback. See [`14_EntityCommandBuffer · Deferred Entity.md`](14_EntityCommandBuffer%20%C2%B7%20Deferred%20Entity.md).
+- `ecb.Instantiate(prefab)` creates a **deferred entity**; `ecb.SetComponent(instance, …)` schedules component writes on it. The `instance` handle is only valid inside this ECB's playback. See [`14_EntityCommandBuffer · Deferred Entity.md`](14_EntityCommandBuffer · Deferred Entity.md).
 
 ---
 
@@ -178,7 +184,7 @@ new SpawnJob { DeltaTime = SystemAPI.Time.DeltaTime, ECB = ecb }
     .ScheduleParallel();
 ```
 
-The `chunkIndex` sort key is what keeps parallel playback deterministic. See [`15_ParallelWriter · Deterministic Playback.md`](15_ParallelWriter%20%C2%B7%20Deterministic%20Playback.md).
+The `chunkIndex` sort key is what keeps parallel playback deterministic. See [`15_ParallelWriter · Deterministic Playback.md`](15_ParallelWriter · Deterministic Playback.md).
 
 ---
 

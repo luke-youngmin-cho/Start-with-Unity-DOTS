@@ -1,3 +1,9 @@
+---
+title: Environment Setup — Unity 6000.5 + Entities 6.5.0
+updated: 2026-04-21
+folder: Getting Started
+---
+
 # Environment Setup — Unity 6000.5 + Entities 6.5.0
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -67,7 +73,7 @@ If all three menus exist, Entities is wired up correctly.
 4. Save the scene. The Cube is **baked** into an entity as soon as the SubScene is closed (yellow icon) or at build time.
 5. Press **Play**. Open **Window → Entities → Hierarchy** — you should see a `Cube` entity. The smoke test passes.
 
-> A SubScene is the authoring entry point: its GameObjects are baked to Entities on save and at build. The remaining tutorial in [`03_Hello DOTS — First Entity.md`](03_Hello%20DOTS%20%E2%80%94%20First%20Entity.md) builds on this.
+> A SubScene is the authoring entry point: its GameObjects are baked to Entities on save and at build. The remaining tutorial in [`03_Hello DOTS — First Entity.md`](03_Hello DOTS — First Entity.md) builds on this.
 
 ---
 
@@ -79,4 +85,4 @@ If all three menus exist, Entities is wired up correctly.
 | `Baker<T>` / `IComponentData` not found | Assembly-definition file excludes `Unity.Entities`. Add it as a reference, or delete the asmdef for a quick test. |
 | SubScene stays as a GameObject and never bakes | The SubScene must be **closed** (the yellow icon) for baked entities to appear. Open/close via the checkbox next to its name in the Hierarchy. |
 | Entities Hierarchy window shows nothing in Play mode | Check that the SubScene is included in the current scene and that **Window → Entities → Hierarchy**'s "World" dropdown is set to `DefaultGameObjectInjectionWorld`. |
-| Build error: `com.unity.entities not found` | Your `manifest.json` still has a leftover `com.unity.entities` entry from a 1.x project — delete it. See [`Migration/02_Package Manager → Core Package.md`](../Migration/02_Package%20Manager%20%E2%86%92%20Core%20Package.md). |
+| Build error: `com.unity.entities not found` | Your `manifest.json` still has a leftover `com.unity.entities` entry from a 1.x project — delete it. See [`Migration/02_Package Manager → Core Package.md`](../Migration/02_Package Manager → Core Package.md). |

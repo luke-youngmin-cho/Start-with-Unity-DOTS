@@ -59,17 +59,17 @@ Start-with-Unity-DOTS/
 
 | Step | Files to Read | Key Content |
 |------|---------------|-------------|
-| 0 | `Getting Started/01` → `02` → `03` | Install Unity 6000.5, understand Core Packages, build your first entity |
-| 1 | `DOTS Workflows/01_Baker Pattern & SubScene.md` → `02_Spawner Example.md` | Authoring → Entity via SubScene + Baker |
-| 2 | `03_ECS Core Concepts.md` | Entity, Component, Archetype, Chunk, World |
-| 3 | `04_Identity Types — Entity · EntityId · UnityObjectRef.md` | Disambiguate three similarly-named identity types: `Entity` (ECS handle, `Unity.Entities`), `EntityId` (engine-level `UnityEngine.Object` id, introduced in Unity 6000.3), `UnityObjectRef<T>` (ECS-side bridge to a `UnityEngine.Object`) |
-| 4 | `05_Component Types.md` | `IComponentData` variants, buffers, shared, cleanup, tag, enableable |
-| 5 | `06_Enableable Component.md` → `07_Singleton Component.md` | Component variants used every day |
-| 6 | `08_System — ISystem vs SystemBase.md` → `09_System Group & Update Order.md` | Systems, groups, ordering |
-| 7 | `10_JobSystem & Burst.md` → `11_IJobEntity · SystemAPI.Query.md` → `12_IJobEntity vs IJobChunk.md` | Parallelism, queries, chunk-level work |
-| 8 | `13_Structural Change & Safety.md` → `14_EntityCommandBuffer · Deferred Entity.md` → `15_ParallelWriter · Deterministic Playback.md` | Safe mutation, deferred ops, deterministic playback |
-| 9 | `Optimizations and Debugging/` (all) | Chunk layout, Inspector tools, Profiler, EntityId audit |
-| 10 | `Migration/` (all) | Upgrading a 1.x project to 6.5 on Unity 6000.5+ |
+| 0 | [`01 Environment Setup`](Getting Started/01_Environment Setup (Unity 6000.5 + Entities 6.5.0).md) → [`02 Core Packages`](Getting Started/02_Core Packages Explained.md) → [`03 Hello DOTS`](Getting Started/03_Hello DOTS — First Entity.md) | Install Unity 6000.5, understand Core Packages, build your first entity |
+| 1 | [`01_Baker Pattern & SubScene.md`](DOTS Workflows/01_Baker Pattern & SubScene.md) → [`02_Spawner Example.md`](DOTS Workflows/02_Spawner Example.md) | Authoring → Entity via SubScene + Baker |
+| 2 | [`03_ECS Core Concepts.md`](DOTS Workflows/03_ECS Core Concepts.md) | Entity, Component, Archetype, Chunk, World |
+| 3 | [`04_Identity Types — Entity · EntityId · UnityObjectRef.md`](DOTS Workflows/04_Identity Types — Entity · EntityId · UnityObjectRef.md) | Disambiguate three similarly-named identity types: `Entity` (ECS handle, `Unity.Entities`), `EntityId` (engine-level `UnityEngine.Object` id, introduced in Unity 6000.3), `UnityObjectRef<T>` (ECS-side bridge to a `UnityEngine.Object`) |
+| 4 | [`05_Component Types.md`](DOTS Workflows/05_Component Types.md) | `IComponentData` variants, buffers, shared, cleanup, tag, enableable |
+| 5 | [`06_Enableable Component.md`](DOTS Workflows/06_Enableable Component.md) → [`07_Singleton Component.md`](DOTS Workflows/07_Singleton Component.md) | Component variants used every day |
+| 6 | [`08_System — ISystem vs SystemBase.md`](DOTS Workflows/08_System — ISystem vs SystemBase.md) → [`09_System Group & Update Order.md`](DOTS Workflows/09_System Group & Update Order.md) | Systems, groups, ordering |
+| 7 | [`10_JobSystem & Burst.md`](DOTS Workflows/10_JobSystem & Burst.md) → [`11_IJobEntity · SystemAPI.Query.md`](DOTS Workflows/11_IJobEntity · SystemAPI.Query.md) → [`12_IJobEntity vs IJobChunk.md`](DOTS Workflows/12_IJobEntity vs IJobChunk.md) | Parallelism, queries, chunk-level work |
+| 8 | [`13_Structural Change & Safety.md`](DOTS Workflows/13_Structural Change & Safety.md) → [`14_EntityCommandBuffer · Deferred Entity.md`](DOTS Workflows/14_EntityCommandBuffer · Deferred Entity.md) → [`15_ParallelWriter · Deterministic Playback.md`](DOTS Workflows/15_ParallelWriter · Deterministic Playback.md) | Safe mutation, deferred ops, deterministic playback |
+| 9 | [`Optimizations and Debugging/`](Optimizations and Debugging/) (all 4) | Chunk layout, Inspector tools, Profiler, EntityId audit |
+| 10 | [`Migration/`](Migration/) (all 5) | Upgrading a 1.x project to 6.5 on Unity 6000.5+ |
 
 ---
 

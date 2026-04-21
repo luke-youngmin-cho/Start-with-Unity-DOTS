@@ -1,3 +1,9 @@
+---
+title: Enableable Component
+updated: 2026-04-21
+folder: DOTS Workflows
+---
+
 # Enableable Component
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -103,7 +109,7 @@ public partial struct StunTickJob : IJobEntity
 }
 ```
 
-Playback happens at the next ECB boundary (e.g. `EndSimulationECBS`) — see [`14_EntityCommandBuffer · Deferred Entity.md`](14_EntityCommandBuffer%20%C2%B7%20Deferred%20Entity.md). No structural change; just a bitmask flip at a known point.
+Playback happens at the next ECB boundary (e.g. `EndSimulationECBS`) — see [`14_EntityCommandBuffer · Deferred Entity.md`](14_EntityCommandBuffer · Deferred Entity.md). No structural change; just a bitmask flip at a known point.
 
 ### 5.2 Toggle the enabled bit directly when you do not need the component value
 

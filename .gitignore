@@ -3,7 +3,7 @@
 claude.config.json
 claude.settings.json
 *.claude
-CLAUDE.md
+CLAUDE.local.md
 .claudeignore
 
 # Claude Code specific

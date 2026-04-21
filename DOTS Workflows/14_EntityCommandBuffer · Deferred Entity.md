@@ -1,3 +1,9 @@
+---
+title: EntityCommandBuffer · Deferred Entity
+updated: 2026-04-21
+folder: DOTS Workflows
+---
+
 # EntityCommandBuffer · Deferred Entity
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -11,7 +17,7 @@
 - A job (where main-thread structural changes aren't allowed).
 - A parallel job across many chunks (via `ParallelWriter`).
 
-See [`13_Structural Change & Safety.md`](13_Structural%20Change%20%26%20Safety.md) for the "why this is dangerous" background.
+See [`13_Structural Change & Safety.md`](13_Structural Change & Safety.md) for the "why this is dangerous" background.
 
 ---
 
@@ -62,7 +68,7 @@ var ecb = SystemAPI
     .AsParallelWriter();
 ```
 
-See [`15_ParallelWriter · Deterministic Playback.md`](15_ParallelWriter%20%C2%B7%20Deterministic%20Playback.md) for the parallel playback contract.
+See [`15_ParallelWriter · Deterministic Playback.md`](15_ParallelWriter · Deterministic Playback.md) for the parallel playback contract.
 
 ---
 
@@ -165,7 +171,7 @@ Use this for self-contained, one-off mutation patterns. For anything that crosse
 
 ## 10. Determinism
 
-ECB commands play back in **record order** on single-writer ECBs. On a `ParallelWriter`, playback order depends on the `sortKey` you provide — see [`15_ParallelWriter · Deterministic Playback.md`](15_ParallelWriter%20%C2%B7%20Deterministic%20Playback.md).
+ECB commands play back in **record order** on single-writer ECBs. On a `ParallelWriter`, playback order depends on the `sortKey` you provide — see [`15_ParallelWriter · Deterministic Playback.md`](15_ParallelWriter · Deterministic Playback.md).
 
 For Netcode / replay systems, deterministic playback is non-negotiable. Always pass a stable sort key (chunk index, entity-in-query index) and avoid recording in main-thread code paths that run in nondeterministic order.
 

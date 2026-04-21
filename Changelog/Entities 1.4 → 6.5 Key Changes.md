@@ -1,3 +1,9 @@
+---
+title: Entities 1.4 → 6.5 Key Changes
+updated: 2026-04-21
+folder: Changelog
+---
+
 # Entities 1.4 → 6.5 Key Changes
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -82,9 +88,9 @@ These sit in the Editor release notes, not the Entities package changelog:
 - **Sorting** to imply creation order (the value is versioned and reused).
 - Storing state in the **high/first bit**.
 
-Refactor guidance: [`Migration/03_InstanceID → EntityId.md`](../Migration/03_InstanceID%20%E2%86%92%20EntityId.md). Audit checklist: [`Optimizations and Debugging/04_EntityId Audit — Deprecated InstanceID Hunt.md`](../Optimizations%20and%20Debugging/04_EntityId%20Audit%20%E2%80%94%20Deprecated%20InstanceID%20Hunt.md).
+Refactor guidance: [`Migration/03_InstanceID → EntityId.md`](../Migration/03_InstanceID → EntityId.md). Audit checklist: [`Optimizations and Debugging/04_EntityId Audit — Deprecated InstanceID Hunt.md`](../Optimizations and Debugging/04_EntityId Audit — Deprecated InstanceID Hunt.md).
 
-> **Important:** `EntityId` is an engine-level replacement for `InstanceID` on `UnityEngine.Object`. It is **not** the same thing as an ECS `Entity`. See [`../DOTS Workflows/04_Identity Types — Entity · EntityId · UnityObjectRef.md`](../DOTS%20Workflows/04_Identity%20Types%20%E2%80%94%20Entity%20%C2%B7%20EntityId%20%C2%B7%20UnityObjectRef.md) for the three-way distinction (`Entity` / `EntityId` / `UnityObjectRef<T>`).
+> **Important:** `EntityId` is an engine-level replacement for `InstanceID` on `UnityEngine.Object`. It is **not** the same thing as an ECS `Entity`. See [`../DOTS Workflows/04_Identity Types — Entity · EntityId · UnityObjectRef.md`](../DOTS Workflows/04_Identity Types — Entity · EntityId · UnityObjectRef.md) for the three-way distinction (`Entity` / `EntityId` / `UnityObjectRef<T>`).
 
 ---
 
@@ -126,12 +132,12 @@ If you are coming from **pre-1.4** code, these are the notable entries between t
 
 | Track | Area | Change | Where to migrate |
 |-------|------|--------|-----------------|
-| **Engine** (6000.3+) | Identity | `InstanceID` → `EntityId` — obsolete on 6000.5, compile errors on 6000.6 | [`Migration/03_InstanceID → EntityId.md`](../Migration/03_InstanceID%20%E2%86%92%20EntityId.md) |
+| **Engine** (6000.3+) | Identity | `InstanceID` → `EntityId` — obsolete on 6000.5, compile errors on 6000.6 | [`Migration/03_InstanceID → EntityId.md`](../Migration/03_InstanceID → EntityId.md) |
 | **Engine** (6000.5) | Object queries | `FindObjectsByType(FindObjectsSortMode.InstanceID)` deprecated | Same page |
 | **Engine** (6000.5) | Profiler | `objectInstanceId`, `parentId`, `instanceIDsCount` replaced by `EntityId`-typed successors | Same page |
-| **Entities package** (6.4) | Distribution | Package Manager → Core Package | [`Migration/02_Package Manager → Core Package.md`](../Migration/02_Package%20Manager%20%E2%86%92%20Core%20Package.md) |
-| **Entities package** (1.4+) | Iteration | `Entities.ForEach` obsolete — removal planned for Entities 2.0 | [`Migration/04_foreach → IJobEntity.md`](../Migration/04_foreach%20%E2%86%92%20IJobEntity.md) |
-| **Entities package** (1.4+) | Abstraction | `IAspect` obsolete — removal planned for Entities 2.0 | [`Migration/05_IAspect Removal.md`](../Migration/05_IAspect%20Removal.md) |
+| **Entities package** (6.4) | Distribution | Package Manager → Core Package | [`Migration/02_Package Manager → Core Package.md`](../Migration/02_Package Manager → Core Package.md) |
+| **Entities package** (1.4+) | Iteration | `Entities.ForEach` obsolete — removal planned for Entities 2.0 | [`Migration/04_foreach → IJobEntity.md`](../Migration/04_foreach → IJobEntity.md) |
+| **Entities package** (1.4+) | Abstraction | `IAspect` obsolete — removal planned for Entities 2.0 | [`Migration/05_IAspect Removal.md`](../Migration/05_IAspect Removal.md) |
 | **Entities package** (1.4+) | Optional refs | `ComponentLookup.GetRefRWOptional()` / `GetRefROOptional()` deprecated | Use `TryGetRefRW<T>()` / `TryGetRefRO<T>()` |
 
 ---

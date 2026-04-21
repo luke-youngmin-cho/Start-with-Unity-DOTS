@@ -1,3 +1,9 @@
+---
+title: IJobEntity vs IJobChunk
+updated: 2026-04-21
+folder: DOTS Workflows
+---
+
 # IJobEntity vs IJobChunk
 ### Unity 6000.5 · Entities 6.5.0
 

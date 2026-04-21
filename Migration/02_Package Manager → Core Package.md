@@ -1,3 +1,9 @@
+---
+title: Package Manager → Core Package
+updated: 2026-04-21
+folder: Migration
+---
+
 # Package Manager → Core Package
 ### Unity 6000.5 · Entities 6.5.0
 

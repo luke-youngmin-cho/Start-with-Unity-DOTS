@@ -1,3 +1,9 @@
+---
+title: foreach → IJobEntity Migration
+updated: 2026-04-21
+folder: Migration
+---
+
 # foreach → IJobEntity Migration
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -22,7 +28,7 @@ You're here either because you opened a 1.x project in 6000.5+ and the compiler 
 - **`SystemAPI.Query<T, U, ...>`** — main-thread iteration inside `OnUpdate`. Simple, no job overhead, ideal for small workloads or when you need managed APIs.
 - **`IJobEntity`** — source-generated parallel job. Drop-in if you're ready for multi-threaded work, which is where DOTS pays off.
 
-Background: [`../DOTS Workflows/11_IJobEntity · SystemAPI.Query.md`](../DOTS%20Workflows/11_IJobEntity%20%C2%B7%20SystemAPI.Query.md).
+Background: [`../DOTS Workflows/11_IJobEntity · SystemAPI.Query.md`](../DOTS Workflows/11_IJobEntity · SystemAPI.Query.md).
 
 ---
 
@@ -170,7 +176,7 @@ Attribute replacements:
 If the original system had a genuine managed field (Input System, UI Toolkit, external service), you can't mechanically convert to `ISystem`. Two options:
 
 1. **Keep it as `SystemBase`** and use `SystemAPI.Query` inside `OnUpdate`. Single-threaded.
-2. **Split** into a `SystemBase` that bridges the managed world and an `ISystem` that does the Burst work — see [`../DOTS Workflows/08_System — ISystem vs SystemBase.md`](../DOTS%20Workflows/08_System%20%E2%80%94%20ISystem%20vs%20SystemBase.md).
+2. **Split** into a `SystemBase` that bridges the managed world and an `ISystem` that does the Burst work — see [`../DOTS Workflows/08_System — ISystem vs SystemBase.md`](../DOTS Workflows/08_System — ISystem vs SystemBase.md).
 
 ---
 

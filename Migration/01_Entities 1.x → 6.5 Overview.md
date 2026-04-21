@@ -1,3 +1,9 @@
+---
+title: Entities 1.x → 6.5 Overview
+updated: 2026-04-21
+folder: Migration
+---
+
 # Entities 1.x → 6.5 Overview
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -13,7 +19,7 @@ Upgrading from Entities 1.x to 6.5 is really **three migrations** on two differe
 
 Each migration is done in its own sub-document in this folder. This page is the **map** — when to do which, in what order.
 
-> **Naming watch-out:** The Entities **package** version (1.4 / 6.4 / 6.5) is distinct from the Unity Editor version (6000.3 / 6000.4 / 6000.5). They align by convention from 6.4 onward but are tracked in separate release notes. This document treats them as two axes; the Changelog page ([`../Changelog/Entities 1.4 → 6.5 Key Changes.md`](../Changelog/Entities%201.4%20%E2%86%92%206.5%20Key%20Changes.md)) does the same.
+> **Naming watch-out:** The Entities **package** version (1.4 / 6.4 / 6.5) is distinct from the Unity Editor version (6000.3 / 6000.4 / 6000.5). They align by convention from 6.4 onward but are tracked in separate release notes. This document treats them as two axes; the Changelog page ([`../Changelog/Entities 1.4 → 6.5 Key Changes.md`](../Changelog/Entities 1.4 → 6.5 Key Changes.md)) does the same.
 
 ---
 
@@ -69,7 +75,7 @@ If your 1.x code already uses `IJobEntity` and `SystemAPI.Query` (not legacy `En
 | Aspects | `IAspect` marked obsolete in 1.4 | Still obsolete, still compiles; removal planned for Entities 2.0 |
 | Optional refs | `GetRefRWOptional` / `GetRefROOptional` deprecated | `TryGetRefRW` / `TryGetRefRO` |
 
-Full changelog for the period is in [`../Changelog/Entities 1.4 → 6.5 Key Changes.md`](../Changelog/Entities%201.4%20%E2%86%92%206.5%20Key%20Changes.md).
+Full changelog for the period is in [`../Changelog/Entities 1.4 → 6.5 Key Changes.md`](../Changelog/Entities 1.4 → 6.5 Key Changes.md).
 
 ---
 
@@ -92,20 +98,20 @@ Non-negotiable before starting:
 - Open the project in the new Editor — it will offer to upgrade `ProjectVersion.txt`. Accept.
 - Let the initial import finish; expect warnings about deprecated APIs and missing packages. That's what the next steps fix.
 
-### 6.2 Package cleanup → [`02_Package Manager → Core Package.md`](02_Package%20Manager%20%E2%86%92%20Core%20Package.md)
+### 6.2 Package cleanup → [`02_Package Manager → Core Package.md`](02_Package Manager → Core Package.md)
 - Remove `com.unity.entities`, `com.unity.collections`, `com.unity.mathematics`, `com.unity.entities.graphics` from `manifest.json`.
 - Delete `packages-lock.json` and let the Editor regenerate.
 - Also remove Netcode for Entities if your project uses it (6.5 is a Core Package version).
 
-### 6.3 Identity migration → [`03_InstanceID → EntityId.md`](03_InstanceID%20%E2%86%92%20EntityId.md)
-- Grep audit per [`../Optimizations and Debugging/04_EntityId Audit — Deprecated InstanceID Hunt.md`](../Optimizations%20and%20Debugging/04_EntityId%20Audit%20%E2%80%94%20Deprecated%20InstanceID%20Hunt.md).
+### 6.3 Identity migration → [`03_InstanceID → EntityId.md`](03_InstanceID → EntityId.md)
+- Grep audit per [`../Optimizations and Debugging/04_EntityId Audit — Deprecated InstanceID Hunt.md`](../Optimizations and Debugging/04_EntityId Audit — Deprecated InstanceID Hunt.md).
 - Replace casts, string round-trips, sign/bit tricks.
 - Re-key dictionaries that used `int` InstanceID.
 
-### 6.4 Legacy ForEach → [`04_foreach → IJobEntity.md`](04_foreach%20%E2%86%92%20IJobEntity.md)
+### 6.4 Legacy ForEach → [`04_foreach → IJobEntity.md`](04_foreach → IJobEntity.md)
 - For systems that still use `Entities.ForEach` / `Job.WithCode` — port to `IJobEntity` + `SystemAPI.Query`.
 
-### 6.5 Aspect removal → [`05_IAspect Removal.md`](05_IAspect%20Removal.md)
+### 6.5 Aspect removal → [`05_IAspect Removal.md`](05_IAspect Removal.md)
 - Inline aspect methods into the call site using `RefRW<T>` / `RefRO<T>` parameters.
 - Delete the `IAspect` struct.
 

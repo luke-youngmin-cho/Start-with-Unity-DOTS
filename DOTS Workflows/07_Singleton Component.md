@@ -1,3 +1,9 @@
+---
+title: Singleton Component
+updated: 2026-04-21
+folder: DOTS Workflows
+---
+
 # Singleton Component
 ### Unity 6000.5 · Entities 6.5.0
 

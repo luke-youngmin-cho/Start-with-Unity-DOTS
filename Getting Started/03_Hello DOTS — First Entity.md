@@ -1,3 +1,9 @@
+---
+title: Hello DOTS — First Entity
+updated: 2026-04-21
+folder: Getting Started
+---
+
 # Hello DOTS — First Entity
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -7,7 +13,7 @@
 
 A cube that rotates on its Y axis, driven by an ECS system. In one sitting you will touch every core concept: **SubScene**, **authoring → baker**, **`IComponentData`**, **`ISystem`**, and the **Entities Hierarchy / Systems** windows. At the end you will swap the main-thread system for an **`IJobEntity`** to see how parallelism enters.
 
-Prerequisite: [`01_Environment Setup.md`](01_Environment%20Setup%20(Unity%206000.5%20%2B%20Entities%206.5.0).md) — a Unity 6000.5 project with a confirmed SubScene and Entities menu.
+Prerequisite: [`01_Environment Setup.md`](01_Environment Setup (Unity 6000.5 + Entities 6.5.0).md) — a Unity 6000.5 project with a confirmed SubScene and Entities menu.
 
 ---
 
@@ -184,10 +190,10 @@ Notes:
 
 | If you want to… | Read |
 |----------------|------|
-| Learn how authoring maps to entities in detail | [`DOTS Workflows/01_Baker Pattern & SubScene.md`](../DOTS%20Workflows/01_Baker%20Pattern%20%26%20SubScene.md) |
-| Spawn many entities at runtime | [`DOTS Workflows/02_Spawner Example.md`](../DOTS%20Workflows/02_Spawner%20Example.md) |
-| Understand Entity / Component / Chunk | [`DOTS Workflows/03_ECS Core Concepts.md`](../DOTS%20Workflows/03_ECS%20Core%20Concepts.md) |
-| Choose between `ISystem` and `SystemBase` | [`DOTS Workflows/08_System — ISystem vs SystemBase.md`](../DOTS%20Workflows/08_System%20%E2%80%94%20ISystem%20vs%20SystemBase.md) |
+| Learn how authoring maps to entities in detail | [`DOTS Workflows/01_Baker Pattern & SubScene.md`](../DOTS Workflows/01_Baker Pattern & SubScene.md) |
+| Spawn many entities at runtime | [`DOTS Workflows/02_Spawner Example.md`](../DOTS Workflows/02_Spawner Example.md) |
+| Understand Entity / Component / Chunk | [`DOTS Workflows/03_ECS Core Concepts.md`](../DOTS Workflows/03_ECS Core Concepts.md) |
+| Choose between `ISystem` and `SystemBase` | [`DOTS Workflows/08_System — ISystem vs SystemBase.md`](../DOTS Workflows/08_System — ISystem vs SystemBase.md) |
 
 ---
 

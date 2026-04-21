@@ -1,3 +1,9 @@
+---
+title: Chunk Layout & TypeManager
+updated: 2026-04-21
+folder: Optimizations and Debugging
+---
+
 # Chunk Layout & TypeManager
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -66,7 +72,7 @@ Heuristics, in rough order of impact:
 1. **Keep unmanaged structs unmanaged.** A single managed `IComponentData` forces side-table storage per entity and breaks Burst.
 2. **Don't pad your structs.** Put `float3` before `float`, not after — alignment holes inflate `SizeInChunk`.
 3. **Split cold fields off.** If only one system reads a field, move it to a sibling component. Unused columns still cost bytes per entity.
-4. **Prefer enableable components over per-frame add/remove.** See [`13_Structural Change & Safety.md`](../DOTS%20Workflows/13_Structural%20Change%20%26%20Safety.md) — toggling a bit beats reshaping the archetype.
+4. **Prefer enableable components over per-frame add/remove.** See [`13_Structural Change & Safety.md`](../DOTS Workflows/13_Structural Change & Safety.md) — toggling a bit beats reshaping the archetype.
 5. **Limit shared component value sets.** Each new value spawns a new chunk bucket.
 6. **Tag components cost zero bytes but still add an archetype.** Don't tag every entity with a unique marker.
 

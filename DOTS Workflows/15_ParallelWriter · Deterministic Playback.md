@@ -1,3 +1,9 @@
+---
+title: ParallelWriter · Deterministic Playback
+updated: 2026-04-21
+folder: DOTS Workflows
+---
+
 # ParallelWriter · Deterministic Playback
 ### Unity 6000.5 · Entities 6.5.0
 

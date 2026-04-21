@@ -1,3 +1,9 @@
+---
+title: Profiler · Bottleneck Analysis
+updated: 2026-04-21
+folder: Optimizations and Debugging
+---
+
 # Profiler · Bottleneck Analysis
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -64,7 +70,7 @@ Jobs show up in the **Timeline** view (or under "Workers" in the Hierarchy view)
 
 Look for markers named:
 
-- `EntityManager.SetArchetype` / `Move Entity` — structural change churn. See [`13_Structural Change & Safety.md`](../DOTS%20Workflows/13_Structural%20Change%20%26%20Safety.md).
+- `EntityManager.SetArchetype` / `Move Entity` — structural change churn. See [`13_Structural Change & Safety.md`](../DOTS Workflows/13_Structural Change & Safety.md).
 - `EntityCommandBufferSystem.OnUpdate (Playback)` — expensive ECB playback. Usually means too many commands recorded per frame.
 - `TypeManager.Initialize` — only at startup; if it appears per-frame, something is reloading the world.
 

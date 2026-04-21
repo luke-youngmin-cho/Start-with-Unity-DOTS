@@ -1,3 +1,9 @@
+---
+title: Identity Types — Entity · EntityId · UnityObjectRef
+updated: 2026-04-21
+folder: DOTS Workflows
+---
+
 # Identity Types — Entity · EntityId · UnityObjectRef
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -49,7 +55,7 @@ Do **not** rely on any of these behaviours any more:
 | `FindObjectsByType(FindObjectsSortMode.InstanceID)` | **Deprecated on 6000.5** | Removed in future |
 | `InstanceIDToObject(int)` in Editor scripts | Obsolete | **Compile error on 6000.6α** |
 
-See the migration checklist in [`Optimizations and Debugging/04_EntityId Audit — Deprecated InstanceID Hunt.md`](../Optimizations%20and%20Debugging/04_EntityId%20Audit%20%E2%80%94%20Deprecated%20InstanceID%20Hunt.md) and the step-by-step refactor in [`Migration/03_InstanceID → EntityId.md`](../Migration/03_InstanceID%20%E2%86%92%20EntityId.md).
+See the migration checklist in [`Optimizations and Debugging/04_EntityId Audit — Deprecated InstanceID Hunt.md`](../Optimizations and Debugging/04_EntityId Audit — Deprecated InstanceID Hunt.md) and the step-by-step refactor in [`Migration/03_InstanceID → EntityId.md`](../Migration/03_InstanceID → EntityId.md).
 
 ---
 

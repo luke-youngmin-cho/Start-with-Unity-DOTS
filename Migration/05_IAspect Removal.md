@@ -1,3 +1,9 @@
+---
+title: IAspect Deprecation — Migrating Off Aspects
+updated: 2026-04-21
+folder: Migration
+---
+
 # IAspect Deprecation — Migrating Off Aspects
 ### Unity 6000.5 · Entities 6.5.0
 

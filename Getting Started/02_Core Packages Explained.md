@@ -1,3 +1,9 @@
+---
+title: Core Packages Explained
+updated: 2026-04-21
+folder: Getting Started
+---
+
 # Core Packages Explained
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -65,7 +71,7 @@ Core Package versions **align with the Editor**:
 
 The old 1.x line still exists (1.4.5 as of 2026-02-16) for projects that cannot yet move to 6000.4+. The two tracks are separate; you upgrade to 6.x by upgrading the Editor.
 
-See [`Changelog/Entities 1.4 → 6.5 Key Changes.md`](../Changelog/Entities%201.4%20%E2%86%92%206.5%20Key%20Changes.md) for the full transition notes.
+See [`Changelog/Entities 1.4 → 6.5 Key Changes.md`](../Changelog/Entities 1.4 → 6.5 Key Changes.md) for the full transition notes.
 
 ---
 
@@ -73,7 +79,7 @@ See [`Changelog/Entities 1.4 → 6.5 Key Changes.md`](../Changelog/Entities%201.
 
 ### `manifest.json`
 
-No `com.unity.entities`, `com.unity.collections`, `com.unity.mathematics`, or `com.unity.entities.graphics` entries are needed. If you upgrade a 1.x project, you remove them — see [`Migration/02_Package Manager → Core Package.md`](../Migration/02_Package%20Manager%20%E2%86%92%20Core%20Package.md).
+No `com.unity.entities`, `com.unity.collections`, `com.unity.mathematics`, or `com.unity.entities.graphics` entries are needed. If you upgrade a 1.x project, you remove them — see [`Migration/02_Package Manager → Core Package.md`](../Migration/02_Package Manager → Core Package.md).
 
 ### `packages-lock.json`
 

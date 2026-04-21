@@ -1,3 +1,9 @@
+---
+title: ECS Core Concepts
+updated: 2026-04-21
+folder: DOTS Workflows
+---
+
 # ECS Core Concepts
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -46,7 +52,7 @@ public struct Health : IComponentData
 }
 ```
 
-There are several component variants (unmanaged, managed, buffer, shared, cleanup, tag, chunk, enableable). See [`05_Component Types.md`](05_Component%20Types.md).
+There are several component variants (unmanaged, managed, buffer, shared, cleanup, tag, chunk, enableable). See [`05_Component Types.md`](05_Component Types.md).
 
 ---
 
@@ -57,7 +63,7 @@ An **archetype** is a unique set of component types that some entities share.
 - An entity with `{ LocalTransform, Health, Enemy }` belongs to archetype A.
 - An entity with `{ LocalTransform, Health, Enemy, Burning }` belongs to archetype B — a different one, because adding `Burning` changed the component set.
 
-Moving between archetypes (adding/removing a component) is a **structural change** and physically moves the entity to a new chunk. See [`13_Structural Change & Safety.md`](13_Structural%20Change%20%26%20Safety.md).
+Moving between archetypes (adding/removing a component) is a **structural change** and physically moves the entity to a new chunk. See [`13_Structural Change & Safety.md`](13_Structural Change & Safety.md).
 
 ---
 
@@ -97,7 +103,7 @@ public partial struct HealthRegenSystem : ISystem
 }
 ```
 
-Systems are registered automatically and live inside a **SystemGroup**. See [`08_System — ISystem vs SystemBase.md`](08_System%20%E2%80%94%20ISystem%20vs%20SystemBase.md) and [`09_System Group & Update Order.md`](09_System%20Group%20%26%20Update%20Order.md).
+Systems are registered automatically and live inside a **SystemGroup**. See [`08_System — ISystem vs SystemBase.md`](08_System — ISystem vs SystemBase.md) and [`09_System Group & Update Order.md`](09_System Group & Update Order.md).
 
 ---
 
@@ -125,7 +131,7 @@ em.SetComponentData(e, new Health { Value = 100, Max = 100 });
 
 The `EntityManager` is the main-thread API for structural changes: create, destroy, add/remove components, instantiate prefab-entities, copy worlds, etc. Structural changes through `EntityManager` are immediate and can invalidate any in-flight query iterators or job references.
 
-For deferred structural changes from jobs or mid-iteration, use an **EntityCommandBuffer** — see [`14_EntityCommandBuffer · Deferred Entity.md`](14_EntityCommandBuffer%20%C2%B7%20Deferred%20Entity.md).
+For deferred structural changes from jobs or mid-iteration, use an **EntityCommandBuffer** — see [`14_EntityCommandBuffer · Deferred Entity.md`](14_EntityCommandBuffer · Deferred Entity.md).
 
 ---
 

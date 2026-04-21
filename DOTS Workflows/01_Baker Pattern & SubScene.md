@@ -1,3 +1,9 @@
+---
+title: Baker Pattern & SubScene
+updated: 2026-04-21
+folder: DOTS Workflows
+---
+
 # Baker Pattern & SubScene
 ### Unity 6000.5 · Entities 6.5.0
 
@@ -161,7 +167,7 @@ public struct ProjectileSpawner : IComponentData
 }
 ```
 
-A runtime system can then instantiate `Prefab` on a timer. See [`02_Spawner Example.md`](02_Spawner%20Example.md).
+A runtime system can then instantiate `Prefab` on a timer. See [`02_Spawner Example.md`](02_Spawner Example.md).
 
 ---
 
