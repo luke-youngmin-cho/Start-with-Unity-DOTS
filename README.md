@@ -50,6 +50,10 @@ Start-with-Unity-DOTS/
 ├─ Changelog/
 │  └─ Entities 1.4 → 6.5 Key Changes.md
 │
+├─ AGENTS.md          (agent-facing style guide — cross-agent standard)
+├─ CLAUDE.md          (Claude Code shim; imports AGENTS.md)
+├─ GLOSSARY.md        (one-line definitions of every key term)
+├─ _TEMPLATE.md       (skeleton for new docs)
 └─ README.md
 ```
 
@@ -111,6 +115,7 @@ flowchart TD
 
 ## 📎 References
 
+- [**Glossary**](GLOSSARY.md) — one-line definitions for every key term used in this manual
 - [Entities 6.5 Manual (Unity)](https://docs.unity3d.com/Packages/com.unity.entities@6.5/manual/index.html)
 - [Entities 6.5 Changelog](https://docs.unity3d.com/Packages/com.unity.entities@6.5/changelog/CHANGELOG.html)
 - [ECS Development Status (Unity Discussions, Dec 2025)](https://discussions.unity.com/t/ecs-development-status-december-2025/1699284)

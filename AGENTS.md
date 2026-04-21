@@ -38,6 +38,8 @@ Do **not** reference Entities 1.x APIs as if they were current. The 1.x → 6.5 
 
 Canonical reading order for humans: `README.md` § "Recommended Learning Path". Do not duplicate that order here — link to it.
 
+**Terminology lookup:** [`GLOSSARY.md`](GLOSSARY.md) at repo root — consult for one-line definitions of any term used in the manual. Deep discussions live in the linked docs.
+
 ---
 
 ## 4. Page structure standard
@@ -76,14 +78,14 @@ Conventions:
 ## 5. Code examples
 
 - Always language-tagged: ` ```csharp ` (never a bare ` ``` `).
-- Prefer **`ISystem`** over `SystemBase`. Prefer **`IJobEntity` / `IJobChunk`** over the removed `Entities.ForEach`.
+- Prefer **`ISystem`** over `SystemBase`. Prefer **`IJobEntity` / `IJobChunk`** over the obsolete `Entities.ForEach` (still compiles on 6.5 with deprecation warnings; removal planned for Entities 2.0).
 - Examples are **Burst-compatible**. Jobs carry `[BurstCompile]` unless the example is specifically demonstrating a non-Burst case.
 - Use `SystemAPI.Query<RefRW<T>>()` / `SystemAPI.GetComponentLookup<T>()` patterns.
 - Include enough context that a copy-paste compiles: `using` directives, `partial` modifier on system/job structs, namespace where relevant.
 
 **Must NOT appear in new code examples:**
-- `Entities.ForEach` — removed.
-- `IAspect` — removed in 6.5.
+- `Entities.ForEach` — obsolete since 1.4; still compiles on 6.5 with deprecation warnings; removal planned for Entities 2.0. Migrate via [`Migration/04_foreach → IJobEntity.md`](Migration/04_foreach → IJobEntity.md).
+- `IAspect` — obsolete since 1.4; still compiles on 6.5 with deprecation warnings; removal planned for Entities 2.0. Migrate via [`Migration/05_IAspect Removal.md`](Migration/05_IAspect Removal.md).
 - `InstanceID` as an ECS identifier — use `Entity` / `EntityId` / `UnityObjectRef<T>` depending on context (see `DOTS Workflows/04_Identity Types — Entity · EntityId · UnityObjectRef.md`).
 - Casting `EntityId` to/from `int`, sorting by `EntityId`, serialising `EntityId` via `ToString` / `int.Parse` — all unsupported in 6.5.
 
@@ -145,3 +147,4 @@ Accuracy matters more than completeness here. When documenting API surface:
 - Legacy 1.4 docs: `legacy/entities-1.4` branch, pinned at commit `2296a52`.
 - Main branch history: scaffold `cdb4aba` → first-draft completion `61c7685`. Further work is incremental.
 - Top-level layout is user-approved and stable. Structural changes need explicit sign-off.
+- **"Placeholder release" in the Changelog** — `Changelog/Entities 1.4 → 6.5 Key Changes.md` §3 describes Entities 6.5.0 as a "placeholder release". This is **Unity's own wording** (direct quote from the official package `CHANGELOG.html`) signifying a version rename with no substantive API changes. It is not a TODO or an incomplete section — leave as-is.
