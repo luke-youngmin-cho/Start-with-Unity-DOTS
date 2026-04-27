@@ -2,7 +2,7 @@
 
 Guidance for AI coding agents working in this repository.
 
-This is a **docs-only** repository — a community manual for Unity DOTS / Entities 6.5.0. There is no Unity project to build, no tests to run. All work is reading, writing, and editing Markdown files.
+This is a **docs-only** repository — a community manual for Unity DOTS / Entities 6.5.0 and Netcode for Entities 6.5.0. There is no Unity project to build, no tests to run. All work is reading, writing, and editing Markdown files.
 
 > Claude Code reads `CLAUDE.md`, which imports this file via `@AGENTS.md`. Edit this file — not `CLAUDE.md` — when updating agent rules.
 
@@ -14,9 +14,10 @@ This is a **docs-only** repository — a community manual for Unity DOTS / Entit
 |---|---|
 | Unity | **6000.5+** (LTS) |
 | Entities | **6.5.0** |
+| Netcode for Entities | **6.5.0** |
 | Collections / Mathematics / Entities Graphics | Core Packages (built into the Editor — no Package Manager install) |
 
-Do **not** reference Entities 1.x APIs as if they were current. The 1.x → 6.5 migration lives in `Migration/` and is framed as legacy throughout.
+Do **not** reference Entities 1.x APIs as if they were current. The 1.x → 6.5 migration lives in `Migration/` and is framed as legacy throughout. Netcode for Entities migration notes live in `Changelog/Netcode for Entities 1.4 → 6.5 Key Changes.md`; keep package-version facts tied to the Netcode changelog, not memory.
 
 ---
 
@@ -31,8 +32,8 @@ Do **not** reference Entities 1.x APIs as if they were current. The 1.x → 6.5 
 | Folder | Purpose | Audience |
 |---|---|---|
 | `Getting Started/` | First-run setup, Core Packages, Hello-DOTS tutorial. | New to DOTS. |
-| `DOTS Workflows/` | Conceptual + hands-on topics (baker, ECS nouns, components, systems, jobs, ECB). Main body. | Working through the manual. |
-| `Optimizations and Debugging/` | Chunk layout, Inspector/Query/Systems windows, profiler, EntityId audit. **No "DOTS" prefix on this folder name.** | Performance / debugging pass. |
+| `DOTS Workflows/` | Conceptual + hands-on topics (baker, ECS nouns, components, systems, jobs, ECB, Netcode workflows). Main body. | Working through the manual. |
+| `Optimizations and Debugging/` | Chunk layout, Inspector/Query/Systems windows, profiler, managed reference audit. **No "DOTS" prefix on this folder name.** | Performance / debugging pass. |
 | `Migration/` | Upgrading a 1.x project to 6.5 on Unity 6000.5+. | Existing 1.x users — distinct from Getting Started. |
 | `Changelog/` | Version diff summary (1.4 → 6.5). | Reference. |
 
@@ -78,16 +79,16 @@ Conventions:
 ## 5. Code examples
 
 - Always language-tagged: ` ```csharp ` (never a bare ` ``` `).
-- Prefer **`ISystem`** over `SystemBase`. Prefer **`IJobEntity` / `IJobChunk`** over the obsolete `Entities.ForEach` (still compiles on 6.5 with deprecation warnings; removal planned for Entities 2.0).
+- Prefer **`ISystem`** over `SystemBase`. Prefer **`IJobEntity` / `IJobChunk`** over the obsolete `Entities.ForEach` (still compiles on 6.5 with deprecation warnings; removal planned for a future major release).
 - Examples are **Burst-compatible**. Jobs carry `[BurstCompile]` unless the example is specifically demonstrating a non-Burst case.
 - Use `SystemAPI.Query<RefRW<T>>()` / `SystemAPI.GetComponentLookup<T>()` patterns.
 - Include enough context that a copy-paste compiles: `using` directives, `partial` modifier on system/job structs, namespace where relevant.
 
 **Must NOT appear in new code examples:**
-- `Entities.ForEach` — obsolete since 1.4; still compiles on 6.5 with deprecation warnings; removal planned for Entities 2.0. Migrate via [`Migration/04_foreach → IJobEntity.md`](Migration/04_foreach → IJobEntity.md).
-- `IAspect` — obsolete since 1.4; still compiles on 6.5 with deprecation warnings; removal planned for Entities 2.0. Migrate via [`Migration/05_IAspect Removal.md`](Migration/05_IAspect Removal.md).
-- `InstanceID` as an ECS identifier — use `Entity` / `EntityId` / `UnityObjectRef<T>` depending on context (see `DOTS Workflows/04_Identity Types — Entity · EntityId · UnityObjectRef.md`).
-- Casting `EntityId` to/from `int`, sorting by `EntityId`, serialising `EntityId` via `ToString` / `int.Parse` — all unsupported in 6.5.
+- `Entities.ForEach` — obsolete since 1.4; still compiles on 6.5 with deprecation warnings; removal planned for a future major release. Migrate via [`Migration/04_foreach → IJobEntity.md`](Migration/04_foreach → IJobEntity.md).
+- `IAspect` — obsolete since 1.4; still compiles on 6.5 with deprecation warnings; removal planned for a future major release. Migrate via [`Migration/05_IAspect Removal.md`](Migration/05_IAspect Removal.md).
+- Raw `Entity` handles in save files or cross-world protocols — use a game-owned stable ID or content key.
+- Managed Unity object fields in hot `IComponentData` — use baked data, `BlobAssetReference<T>`, or `UnityObjectRef<T>` depending on the use case.
 
 ---
 
@@ -120,12 +121,11 @@ Do not invent additional fields without updating this spec first.
 Accuracy matters more than completeness here. When documenting API surface:
 
 1. **Never** invent method names, type names, or flags. If unsure, write a stub and ask the maintainer rather than guessing.
-2. Cross-check against:
+2. Cross-check against official package documentation:
    - Official manual: https://docs.unity3d.com/Packages/com.unity.entities@6.5/manual/index.html
    - Changelog: https://docs.unity3d.com/Packages/com.unity.entities@6.5/changelog/CHANGELOG.html
-   - Unity Discussions (maintainer-referenced):
-     - `discussions.unity.com/t/ecs-development-status-december-2025/1699284`
-     - `discussions.unity.com/t/coreclr-scripting-and-ecs-status-update-march-2026/1711852`
+   - Netcode manual: https://docs.unity3d.com/Packages/com.unity.netcode@6.5/manual/index.html
+   - Netcode changelog: https://docs.unity3d.com/Packages/com.unity.netcode@6.5/changelog/CHANGELOG.html
 3. If you cannot verify an API name in the above, leave the section as `> TODO: verify <name> against 6.5.0 API surface` and stop there.
 
 ---
@@ -147,4 +147,4 @@ Accuracy matters more than completeness here. When documenting API surface:
 - Legacy 1.4 docs: `legacy/entities-1.4` branch, pinned at commit `2296a52`.
 - Main branch history: scaffold `cdb4aba` → first-draft completion `61c7685`. Further work is incremental.
 - Top-level layout is user-approved and stable. Structural changes need explicit sign-off.
-- **"Placeholder release" in the Changelog** — `Changelog/Entities 1.4 → 6.5 Key Changes.md` §3 describes Entities 6.5.0 as a "placeholder release". This is **Unity's own wording** (direct quote from the official package `CHANGELOG.html`) signifying a version rename with no substantive API changes. It is not a TODO or an incomplete section — leave as-is.
+- **"Placeholder release" in the Changelog** — `Changelog/Entities 1.4 → 6.5 Key Changes.md` §2 describes Entities 6.5.0 as a "placeholder release". This is **Unity's own wording** (direct quote from the official package `CHANGELOG.html`) signifying a version rename with no substantive package-level API changes. It is not a TODO or an incomplete section — leave as-is.

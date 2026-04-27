@@ -1,6 +1,6 @@
 ---
 title: Profiler · Bottleneck Analysis
-updated: 2026-04-21
+updated: 2026-04-27
 folder: Optimizations and Debugging
 ---
 
@@ -93,6 +93,8 @@ Burst systems should show zero allocations in the Profiler's Memory module.
 - **Entities** (if available) — a DOTS-specific module showing per-system timings over time.
 
 The Entities Profiler module arrived with 1.8.0 / 6.x and aligns with the Systems window on a timeline. If you see multi-frame spikes, this is the fastest way to attribute them.
+
+For networked projects, pair this with [`../DOTS Workflows/24_Netcode Profiler & Debugging.md`](../DOTS Workflows/24_Netcode Profiler & Debugging.md) to inspect Ghost snapshots, prediction ticks, and Netcode-specific bandwidth.
 
 ---
 

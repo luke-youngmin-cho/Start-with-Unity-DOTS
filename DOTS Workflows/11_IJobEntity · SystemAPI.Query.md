@@ -1,6 +1,6 @@
 ---
 title: IJobEntity · SystemAPI.Query
-updated: 2026-04-21
+updated: 2026-04-27
 folder: DOTS Workflows
 ---
 
@@ -18,7 +18,7 @@ Two APIs cover 95% of component iteration in Entities 6.5:
 | `SystemAPI.Query<...>()` | Main thread, inside `OnUpdate` | The work is trivial (a few hundred entities), or needs main-thread APIs. |
 | `IJobEntity` | Worker threads, via `Schedule / ScheduleParallel` | The work is heavier or benefits from parallelism. |
 
-They are the recommended replacement for the legacy `Entities.ForEach` (marked obsolete in Entities 1.4; still compiles on 6.5 with deprecation warnings; removal planned for Entities 2.0).
+They are the recommended replacement for the legacy `Entities.ForEach` (marked obsolete in Entities 1.4; still compiles on 6.5 with deprecation warnings; Unity's changelog says removal is planned for a future major release).
 
 ---
 
@@ -168,7 +168,7 @@ void Execute([ChunkIndexInQuery] int chunkIndex, in Health health, Entity entity
 - **Don't capture `this` or managed fields in a job.** The source generator will error if you try.
 - **`RefRW<T>.ValueRW` triggers change tracking.** Reading through `ValueRW` and never writing still dirties the chunk.
 - **`WithChangeFilter<T>` is chunk-level.** If any entity in the chunk writes to `T`, the whole chunk is considered changed.
-- **Aspects are obsolete (but not removed).** The `IAspect` grouping interface was deprecated in 1.4 and is still listed as a valid `Execute` parameter kind on the 6.5 API reference. New code should use plain component parameters; existing aspects will still compile until Entities 2.0.
+- **Aspects are obsolete (but not removed).** The `IAspect` grouping interface was deprecated in 1.4 and is still listed as a valid `Execute` parameter kind on the 6.5 API reference. New code should use plain component parameters; existing aspects still compile on 6.5.
 
 ---
 

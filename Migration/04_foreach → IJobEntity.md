@@ -1,6 +1,6 @@
 ---
 title: foreach → IJobEntity Migration
-updated: 2026-04-21
+updated: 2026-04-27
 folder: Migration
 ---
 
@@ -15,11 +15,11 @@ The legacy component-iteration APIs are **obsolete** on Entities 1.4+ / 6.5 but 
 
 | Legacy | Status in 6.5 | Replacement |
 |--------|--------------|-------------|
-| `Entities.ForEach` | **Obsolete** since 1.4; deprecation warnings on every use; scheduled for removal in the next major version (Entities 2.0) | `SystemAPI.Query<...>` (main thread) or `IJobEntity` (jobs) |
+| `Entities.ForEach` | **Obsolete** since 1.4; deprecation warnings on every use; Unity's changelog says it will be removed in a future major release | `SystemAPI.Query<...>` (main thread) or `IJobEntity` (jobs) |
 | `Job.WithCode` | **Obsolete** alongside ForEach | Plain `IJob` struct, or inline in `OnUpdate` |
 | `IJobForEach` (pre-1.0) | Removed long before 1.4 | `IJobEntity` |
 
-You're here either because you opened a 1.x project in 6000.5+ and the compiler is warning loudly, or because you want to clear these warnings before the next major version lands. The refactor is mechanical once you see the pattern.
+You're here either because you opened a 1.x project in 6000.5+ and the compiler is warning loudly, or because you want to clear these warnings before a future major package release removes the API. The refactor is mechanical once you see the pattern.
 
 ---
 
@@ -194,7 +194,7 @@ After porting a system:
 
 | Symptom | Cause / Fix |
 |---------|-------------|
-| `warning: Entities.ForEach is obsolete` | Expected on 6.5 — the code still compiles. Port as above to clear the warning before Entities 2.0 removes it. |
+| `warning: Entities.ForEach is obsolete` | Expected on 6.5 — the code still compiles. Port as above to clear the warning before a future major release removes it. |
 | `error: 'SystemAPI' does not contain 'Query'` | System is not `partial`, or the struct doesn't implement `ISystem` correctly. |
 | `IJobEntity` compiles but doesn't run | Missing `[BurstCompile]` on the struct and on `OnUpdate`; source generator doesn't schedule non-partial types. |
 | Job reads stale values | Captured a local before `.Schedule*` was called. Fields must be set on the job struct before scheduling. |

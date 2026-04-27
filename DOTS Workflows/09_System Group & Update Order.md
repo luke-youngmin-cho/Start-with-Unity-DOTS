@@ -1,6 +1,6 @@
 ---
 title: System Group & Update Order
-updated: 2026-04-21
+updated: 2026-04-27
 folder: DOTS Workflows
 ---
 
@@ -42,7 +42,7 @@ flowchart TD
 | `BeginSimulationEntityCommandBufferSystem` | First thing in Simulation | Ordered ECB playback (early) |
 | `EndSimulationEntityCommandBufferSystem` | Last thing in Simulation | Ordered ECB playback (late) |
 
-Netcode for Entities adds more (PredictedSimulationSystemGroup, GhostSendSystem, etc.) — they nest inside the ones above.
+Netcode for Entities adds more (`PredictedSimulationSystemGroup`, `GhostSendSystem`, etc.) — they nest inside the ones above. See [`16_Netcode Client-Server World & Bootstrap.md`](16_Netcode Client-Server World & Bootstrap.md) and [`19_Netcode Prediction & Rollback.md`](19_Netcode Prediction & Rollback.md).
 
 ---
 

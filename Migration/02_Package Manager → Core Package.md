@@ -1,6 +1,6 @@
 ---
 title: Package Manager → Core Package
-updated: 2026-04-21
+updated: 2026-04-27
 folder: Migration
 ---
 
@@ -52,10 +52,10 @@ Open `Packages/manifest.json`. It looks something like:
 ```json
 {
   "dependencies": {
-    "com.unity.entities": "1.4.5",
+    "com.unity.entities": "1.4.2",
     "com.unity.collections": "2.4.5",
     "com.unity.mathematics": "1.3.2",
-    "com.unity.entities.graphics": "1.4.5",
+    "com.unity.entities.graphics": "1.4.2",
     "com.unity.netcode": "1.12.0",
     "com.unity.physics": "1.3.14",
     "com.unity.render-pipelines.universal": "17.0.4",
@@ -69,10 +69,10 @@ Remove the five lines that are now Core Packages:
 ```diff
  {
    "dependencies": {
--    "com.unity.entities": "1.4.5",
+-    "com.unity.entities": "1.4.2",
 -    "com.unity.collections": "2.4.5",
 -    "com.unity.mathematics": "1.3.2",
--    "com.unity.entities.graphics": "1.4.5",
+-    "com.unity.entities.graphics": "1.4.2",
 -    "com.unity.netcode": "1.12.0",
      "com.unity.physics": "1.3.14",
      "com.unity.render-pipelines.universal": "17.0.4",

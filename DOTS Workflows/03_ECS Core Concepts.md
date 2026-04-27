@@ -1,6 +1,6 @@
 ---
 title: ECS Core Concepts
-updated: 2026-04-21
+updated: 2026-04-27
 folder: DOTS Workflows
 ---
 
@@ -115,7 +115,7 @@ A **World** is a container that owns:
 - A set of **systems** and their SystemGroups.
 - The chunks themselves (via the EntityManager).
 
-The default runtime world is `DefaultGameObjectInjectionWorld`. Most games have one world in production; multi-world setups show up in Netcode (server / client) or in editor tooling.
+The default runtime world is `DefaultGameObjectInjectionWorld`. Most games have one world in production; multi-world setups show up in Netcode (server / client) or in editor tooling. See [`16_Netcode Client-Server World & Bootstrap.md`](16_Netcode Client-Server World & Bootstrap.md) for the Netcode world split.
 
 ```csharp
 World world = World.DefaultGameObjectInjectionWorld;

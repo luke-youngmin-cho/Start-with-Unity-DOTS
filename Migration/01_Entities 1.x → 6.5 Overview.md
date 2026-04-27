@@ -1,6 +1,6 @@
 ---
 title: Entities 1.x → 6.5 Overview
-updated: 2026-04-21
+updated: 2026-04-27
 folder: Migration
 ---
 
@@ -11,11 +11,11 @@ folder: Migration
 
 ## 1. What you're signing up for
 
-Upgrading from Entities 1.x to 6.5 is really **three migrations** on two different version tracks:
+Upgrading from Entities 1.x to 6.5 is mainly **three DOTS migrations** on one package-distribution transition:
 
-1. **Editor upgrade.** You move to Unity 6000.4+ (`com.unity.entities` 6.4) or 6000.5+ (Entities 6.5). The engine itself brings its own changes along, notably the `InstanceID` → `EntityId` transition that started in Unity 6000.3 and tightens progressively through 6000.5 / 6000.6. Those are **engine-wide** changes — they affect every Unity project, not just ECS ones.
-2. **Package distribution transition.** The `com.unity.entities` package 6.4 became a **Core Package** (embedded in the Editor). Your `manifest.json` loses its `com.unity.entities`, `com.unity.collections`, `com.unity.mathematics`, `com.unity.entities.graphics` entries.
-3. **ECS API migration.** Legacy APIs marked obsolete in Entities 1.4 — `Entities.ForEach`, `IAspect` — are still obsolete (not removed) on 6.5 but slated for removal in the next major version. Also: `ComponentLookup.GetRefRWOptional` → `TryGetRefRW`.
+1. **Editor/package distribution upgrade.** You move to Unity 6000.4+ (`com.unity.entities` 6.4) or 6000.5+ (Entities 6.5), where Entities is a Core Package embedded in the Editor.
+2. **ECS data cleanup.** Review managed Unity object references in ECS-facing data and migrate hot-path component data toward unmanaged components, baked values, `BlobAssetReference<T>`, or `UnityObjectRef<T>`.
+3. **ECS API migration.** Legacy APIs marked obsolete in Entities 1.4 — `Entities.ForEach`, `IAspect` — are still obsolete on 6.5. Also: `ComponentLookup.GetRefRWOptional` → `TryGetRefRW`.
 
 Each migration is done in its own sub-document in this folder. This page is the **map** — when to do which, in what order.
 
@@ -29,8 +29,8 @@ Each migration is done in its own sub-document in this folder. This page is the 
 flowchart TD
     A["Backup / branch"] --> B["Upgrade Editor to 6000.5+"]
     B --> C["02 Package Manager -> Core Package"]
-    C --> D["Fix compile errors"]
-    D --> E["03 InstanceID -> EntityId audit"]
+    C --> D["Fix compile errors and package resolution"]
+    D --> E["03 Managed references -> UnityObjectRef"]
     E --> F["04 foreach -> IJobEntity"]
     F --> G["05 IAspect Removal"]
     G --> H["Regression test the game"]
@@ -40,7 +40,7 @@ Why this order:
 
 - **Editor first** because nothing else compiles against 6.x APIs until the Editor knows about them.
 - **Package Manager → Core Package next** — without this, you have duplicate / conflicting package resolution.
-- **InstanceID audit before refactors** — `EntityId` is engine-wide and surfaces in shared code; fixing it early avoids re-fixing it in every ECS refactor.
+- **Managed reference cleanup before iteration refactors** — it keeps the data model clear before rewriting systems and jobs around it.
 - **foreach / IAspect last** — these are ECS-internal; they don't block the rest of the codebase.
 
 ---
@@ -70,9 +70,9 @@ If your 1.x code already uses `IJobEntity` and `SystemAPI.Query` (not legacy `En
 |------|-----|-----|
 | Distribution | `com.unity.entities` UPM package | Core Package (no manifest entry) |
 | Version number | 1.4.x | 6.5.x (aligns with Unity 6000.5) |
-| Identity for `UnityEngine.Object` | `InstanceID` (int) deprecated | `EntityId` (opaque) preferred |
-| Component iteration (legacy) | `Entities.ForEach` marked obsolete in 1.4 | Still obsolete, still compiles with warnings; removal planned for Entities 2.0 |
-| Aspects | `IAspect` marked obsolete in 1.4 | Still obsolete, still compiles; removal planned for Entities 2.0 |
+| Managed Unity object references in ECS data | Often stored in managed components | Prefer baked data, blobs, or `UnityObjectRef<T>` where appropriate |
+| Component iteration (legacy) | `Entities.ForEach` marked obsolete in 1.4 | Still obsolete, still compiles with warnings; removal planned for a future major release |
+| Aspects | `IAspect` marked obsolete in 1.4 | Still obsolete, still compiles; removal planned for a future major release |
 | Optional refs | `GetRefRWOptional` / `GetRefROOptional` deprecated | `TryGetRefRW` / `TryGetRefRO` |
 
 Full changelog for the period is in [`../Changelog/Entities 1.4 → 6.5 Key Changes.md`](../Changelog/Entities 1.4 → 6.5 Key Changes.md).
@@ -103,10 +103,11 @@ Non-negotiable before starting:
 - Delete `packages-lock.json` and let the Editor regenerate.
 - Also remove Netcode for Entities if your project uses it (6.5 is a Core Package version).
 
-### 6.3 Identity migration → [`03_InstanceID → EntityId.md`](03_InstanceID → EntityId.md)
-- Grep audit per [`../Optimizations and Debugging/04_EntityId Audit — Deprecated InstanceID Hunt.md`](../Optimizations and Debugging/04_EntityId Audit — Deprecated InstanceID Hunt.md).
-- Replace casts, string round-trips, sign/bit tricks.
-- Re-key dictionaries that used `int` InstanceID.
+### 6.3 Managed object references → [`03_Managed Object References → UnityObjectRef.md`](03_Managed Object References → UnityObjectRef.md)
+- Audit ECS-facing code for managed Unity object fields.
+- Convert hot-path component data to unmanaged ECS data where possible.
+- Use `UnityObjectRef<T>` for ECS-side references to Unity assets/objects.
+- Use `BlobAssetReference<T>` for large immutable gameplay data.
 
 ### 6.4 Legacy ForEach → [`04_foreach → IJobEntity.md`](04_foreach → IJobEntity.md)
 - For systems that still use `Entities.ForEach` / `Job.WithCode` — port to `IJobEntity` + `SystemAPI.Query`.
@@ -124,7 +125,7 @@ Smoke tests to run before declaring the migration done:
 1. **Play mode on a representative SubScene.** Entities exist, systems tick, nothing throws on start.
 2. **Build a standalone player.** Build-only breakages (usually serialization) appear here.
 3. **Run your existing gameplay regression tests.** If performance matters, capture a baseline Profiler trace from before migration and diff.
-4. **Check save/load.** If save files contained InstanceIDs or entity indices, they are invalid — migrate on load or accept the data loss.
+4. **Check save/load.** Raw `Entity` handles are world-local and not stable. Save game-owned IDs, content keys, or authored data instead.
 5. **Run on a target platform.** Some platform-specific backends (IL2CPP quirks, AOT) shake out here.
 
 ---

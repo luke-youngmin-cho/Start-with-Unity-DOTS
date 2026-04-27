@@ -1,6 +1,6 @@
 ---
 title: IAspect Deprecation — Migrating Off Aspects
-updated: 2026-04-21
+updated: 2026-04-27
 folder: Migration
 ---
 
@@ -11,7 +11,7 @@ folder: Migration
 
 ## 1. Status — deprecated, not yet removed
 
-`IAspect` was marked **obsolete in Entities 1.4** and remains obsolete on the 6.x line. It still compiles, still runs, and is still listed as a valid `IJobEntity.Execute` parameter kind on the 6.5 API reference — but the compiler raises a deprecation warning, and Unity has stated the type will be **removed in a future major release** (Entities 2.0). New code should not use it; existing code should migrate at an opportunistic pace.
+`IAspect` was marked **obsolete in Entities 1.4** and remains obsolete on the 6.x line. It still compiles, still runs, and is still listed as a valid `IJobEntity.Execute` parameter kind on the 6.5 API reference — but the compiler raises a deprecation warning, and Unity has stated the type will be **removed in a future major release**. New code should not use it; existing code should migrate at an opportunistic pace.
 
 `IAspect` was introduced to let systems declare a "view" over a set of components and use it as a single argument in `Entities.ForEach` or `IJobEntity`. In practice it added a layer of source generation and a parallel type system that didn't pay for itself:
 
@@ -204,7 +204,7 @@ If the aspect had many fields, encapsulated state, or participated in non-trivia
 | Symptom | Cause / Fix |
 |---------|-------------|
 | Compile warning `IAspect is obsolete` | Expected on 6.5. Port as above to clear the warning; the code still runs until removal in a future major version. |
-| `type or namespace IAspect not found` | You are on a version where `IAspect` has been removed (Entities 2.0+). Complete the port — no fallback remains. |
+| `type or namespace IAspect not found` | You are on a version where `IAspect` has been removed. Complete the port — no fallback remains. |
 | Query tuple has too many types and doesn't compile | `SystemAPI.Query` supports a large tuple; splitting a very wide query into two queries or moving to `IJobChunk` usually reads better. |
 | Job no longer Burst-compiles | An aspect method may have captured a type Burst didn't like. Re-check the `Execute` parameters directly. |
 | Cross-entity aspect ported naively runs slowly | `ComponentLookup<T>.Update(ref state)` must be called in `OnUpdate` before use; forgetting it makes lookups invalid. |

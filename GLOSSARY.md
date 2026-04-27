@@ -1,5 +1,5 @@
 # Glossary
-### Unity 6000.5 · Entities 6.5.0
+### Unity 6000.5 · Entities 6.5.0 · Netcode for Entities 6.5.0
 
 One-line definitions for every non-obvious term used in this manual. Cross-links point to the doc where each term is defined in depth.
 
@@ -74,32 +74,58 @@ Details: [`DOTS Workflows/13_Structural Change & Safety.md`](DOTS Workflows/13_S
 
 ---
 
-## 6. Identity types — the three-way distinction
+## 6. Entity reference types
 
-These are **three different things** that are easy to confuse.
+These are the DOTS reference types used in ECS data and baking workflows.
 
 | Type | What it is |
 |---|---|
 | `Entity` | ECS handle (`Unity.Entities`). Just an ID in the ECS world. |
-| `EntityId` | Engine-level replacement for `UnityEngine.Object.GetInstanceID()`, introduced in Unity 6000.3. **Not** the ECS `Entity`. |
+| `EntityPrefabReference` | Reference to a baked entity prefab asset for content/streaming workflows (`Unity.Entities.Serialization`). |
 | `UnityObjectRef<T>` | ECS-side reference to a `UnityEngine.Object` — lets entities point at managed assets (materials, meshes) without boxing. |
 
-Details: [`DOTS Workflows/04_Identity Types — Entity · EntityId · UnityObjectRef.md`](DOTS Workflows/04_Identity Types — Entity · EntityId · UnityObjectRef.md).
+Details: [`DOTS Workflows/04_Entity References — Entity · EntityPrefabReference · UnityObjectRef.md`](DOTS Workflows/04_Entity References — Entity · EntityPrefabReference · UnityObjectRef.md).
 
 ---
 
-## 7. Legacy / obsolete (do NOT appear in new code)
+## 7. Netcode for Entities
+
+| Term | What it is | See |
+|---|---|---|
+| Netcode for Entities | Unity's DOTS multiplayer netcode layer for server-authoritative games with client prediction. | [`DOTS Workflows/16_Netcode Client-Server World & Bootstrap.md`](DOTS Workflows/16_Netcode Client-Server World & Bootstrap.md) |
+| Server World | Authoritative ECS world that runs the server simulation and sends Ghost snapshots. | [`DOTS Workflows/16_Netcode Client-Server World & Bootstrap.md`](DOTS Workflows/16_Netcode Client-Server World & Bootstrap.md) |
+| Client World | ECS world that receives snapshots, sends commands, predicts local gameplay, and presents interpolated state. | [`DOTS Workflows/16_Netcode Client-Server World & Bootstrap.md`](DOTS Workflows/16_Netcode Client-Server World & Bootstrap.md) |
+| Thin Client World | Lightweight dummy client world used for testing load and connection behavior. | [`DOTS Workflows/16_Netcode Client-Server World & Bootstrap.md`](DOTS Workflows/16_Netcode Client-Server World & Bootstrap.md) |
+| `NetworkStreamConnection` | Component on a connection entity that stores the transport connection handle. | [`DOTS Workflows/17_Netcode Network Connection & Approval.md`](DOTS Workflows/17_Netcode Network Connection & Approval.md) |
+| `NetworkId` | Server-assigned connection ID after approval. | [`DOTS Workflows/17_Netcode Network Connection & Approval.md`](DOTS Workflows/17_Netcode Network Connection & Approval.md) |
+| `NetworkStreamInGame` | Component that enables gameplay data exchange; without it, snapshots and commands do not flow. | [`DOTS Workflows/17_Netcode Network Connection & Approval.md`](DOTS Workflows/17_Netcode Network Connection & Approval.md) |
+| Ghost | Server-authoritative networked entity replicated to clients through snapshots. | [`DOTS Workflows/18_Netcode Ghost Snapshot & Synchronization.md`](DOTS Workflows/18_Netcode Ghost Snapshot & Synchronization.md) |
+| Snapshot | Serialized Ghost state sent from server to client, usually over unreliable transport. | [`DOTS Workflows/18_Netcode Ghost Snapshot & Synchronization.md`](DOTS Workflows/18_Netcode Ghost Snapshot & Synchronization.md) |
+| `GhostField` | Attribute that marks a component field for Ghost serialization. | [`DOTS Workflows/18_Netcode Ghost Snapshot & Synchronization.md`](DOTS Workflows/18_Netcode Ghost Snapshot & Synchronization.md) |
+| `PredictedGhost` | Component identifying Ghosts that participate in client prediction. | [`DOTS Workflows/19_Netcode Prediction & Rollback.md`](DOTS Workflows/19_Netcode Prediction & Rollback.md) |
+| `Simulate` | Enableable tag used by Netcode to mark which predicted entities should run on the current prediction tick. | [`DOTS Workflows/19_Netcode Prediction & Rollback.md`](DOTS Workflows/19_Netcode Prediction & Rollback.md) |
+| `IInputComponentData` | High-level input component type with generated command-buffer management. | [`DOTS Workflows/20_Netcode Command Stream & Input.md`](DOTS Workflows/20_Netcode Command Stream & Input.md) |
+| `ICommandData` | Lower-level command stream type where tick mapping and buffer access are managed manually. | [`DOTS Workflows/20_Netcode Command Stream & Input.md`](DOTS Workflows/20_Netcode Command Stream & Input.md) |
+| `InputEvent` | One-shot input marker for events such as jump/fire that must register exactly once on the target tick. | [`DOTS Workflows/20_Netcode Command Stream & Input.md`](DOTS Workflows/20_Netcode Command Stream & Input.md) |
+| `IRpcCommand` | Reliable one-shot RPC message type. | [`DOTS Workflows/21_Netcode RPC.md`](DOTS Workflows/21_Netcode RPC.md) |
+| `IApprovalRpcCommand` | Special RPC type allowed during connection approval. | [`DOTS Workflows/21_Netcode RPC.md`](DOTS Workflows/21_Netcode RPC.md) |
+| Ghost Importance | Server-side priority score that decides which Ghosts fit into snapshot budget first. | [`DOTS Workflows/22_Netcode Ghost Optimization · Importance · Relevancy.md`](DOTS Workflows/22_Netcode Ghost Optimization · Importance · Relevancy.md) |
+| Ghost Relevancy | Per-connection filtering that decides whether a Ghost should replicate to a specific client. | [`DOTS Workflows/22_Netcode Ghost Optimization · Importance · Relevancy.md`](DOTS Workflows/22_Netcode Ghost Optimization · Importance · Relevancy.md) |
+| Lag Compensation | Server-side lookup of historical collision worlds so it can validate client actions at the client's perceived time. | [`DOTS Workflows/23_Netcode Physics Integration & Lag Compensation.md`](DOTS Workflows/23_Netcode Physics Integration & Lag Compensation.md) |
+
+---
+
+## 8. Legacy / obsolete (do NOT appear in new code)
 
 | Term | Status on 6.5 | Migration target |
 |---|---|---|
-| `Entities.ForEach` | Obsolete since 1.4; still compiles with warnings; removal planned for Entities 2.0. | `SystemAPI.Query<>()` or `IJobEntity` — [`Migration/04_foreach → IJobEntity.md`](Migration/04_foreach → IJobEntity.md) |
-| `IAspect` | Obsolete since 1.4; still compiles with warnings; removal planned for Entities 2.0. | Direct component parameters (`RefRW<T>` / `RefRO<T>`) — [`Migration/05_IAspect Removal.md`](Migration/05_IAspect Removal.md) |
-| `InstanceID` (engine-level id) | Obsolete on Unity 6000.5; compile errors expected on 6000.6. | `EntityId` — [`Migration/03_InstanceID → EntityId.md`](Migration/03_InstanceID → EntityId.md) |
+| `Entities.ForEach` | Obsolete since 1.4; still compiles with warnings; removal planned for a future major release. | `SystemAPI.Query<>()` or `IJobEntity` — [`Migration/04_foreach → IJobEntity.md`](Migration/04_foreach → IJobEntity.md) |
+| `IAspect` | Obsolete since 1.4; still compiles with warnings; removal planned for a future major release. | Direct component parameters (`RefRW<T>` / `RefRO<T>`) — [`Migration/05_IAspect Removal.md`](Migration/05_IAspect Removal.md) |
 | `ComponentLookup.GetRefRWOptional` | Obsolete. | `TryGetRefRW` — see [`Migration/01_Entities 1.x → 6.5 Overview.md`](Migration/01_Entities 1.x → 6.5 Overview.md) |
 
 ---
 
-## 8. Supporting concepts
+## 9. Supporting concepts
 
 | Term | What it is |
 |---|---|

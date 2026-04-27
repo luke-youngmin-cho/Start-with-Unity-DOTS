@@ -1,6 +1,6 @@
 ---
 title: Core Packages Explained
-updated: 2026-04-21
+updated: 2026-04-27
 folder: Getting Started
 ---
 
@@ -22,8 +22,6 @@ This page explains:
 - Where their version numbers come from.
 - What changes in your `manifest.json` and `packages-lock.json`.
 - Why the shift happened.
-
-> Not to be confused with the **engine-level** changes on Unity Editor 6000.3–6000.5 (e.g. `InstanceID` → `EntityId`). Those are separate and documented alongside each affected feature.
 
 ---
 
@@ -69,9 +67,9 @@ Core Package versions **align with the Editor**:
 | Unity 6000.4 | Entities 6.4 |
 | Unity 6000.5 | Entities 6.5 |
 
-The old 1.x line still exists (1.4.5 as of 2026-02-16) for projects that cannot yet move to 6000.4+. The two tracks are separate; you upgrade to 6.x by upgrading the Editor.
+The old 1.x line still exists for projects that cannot yet move to 6000.4+. The two tracks are separate; you upgrade to 6.x by upgrading the Editor.
 
-See [`Changelog/Entities 1.4 → 6.5 Key Changes.md`](../Changelog/Entities 1.4 → 6.5 Key Changes.md) for the full transition notes.
+See [`Changelog/Entities 1.4 → 6.5 Key Changes.md`](../Changelog/Entities 1.4 → 6.5 Key Changes.md) for Entities transition notes and [`Changelog/Netcode for Entities 1.4 → 6.5 Key Changes.md`](../Changelog/Netcode for Entities 1.4 → 6.5 Key Changes.md) for Netcode-specific changes.
 
 ---
 
