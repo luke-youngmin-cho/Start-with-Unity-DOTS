@@ -1,6 +1,6 @@
 ---
 title: Core Packages Explained
-updated: 2026-04-27
+updated: 2026-04-28
 folder: Getting Started
 ---
 
@@ -15,7 +15,7 @@ With the **Entities package 6.4.0** release (shipping alongside Unity Editor 600
 
 > *"Package is now a core package embedded in Unity."*
 
-This affected `com.unity.entities`, `com.unity.collections`, `com.unity.mathematics`, `com.unity.entities.graphics`, and (on its matching 6.5 release) Netcode for Entities. It changes how you install, version, and track them — but it is a **distribution** change, not an API change.
+This affected `com.unity.entities`, `com.unity.collections`, `com.unity.entities.graphics`, `com.unity.physics`, and (on its matching 6.5 release) Netcode for Entities. `com.unity.mathematics` remains part of the DOTS programming surface and is updated in the Unity 6000.5 package set, but its package changelog does not use the 6.x Core Package wording. These distribution changes affect how you install, version, and track packages, but they are not API changes by themselves.
 
 This page explains:
 - Which packages are now Core Packages (and which are not).
@@ -46,15 +46,15 @@ A **Core Package** is a package that ships **inside the Editor**. You do not add
 |---------|-----------------|---------|
 | **Entities** | **Core Package** (6.5) | ECS runtime: Entity, Component, System, World |
 | **Collections** | **Core Package** | Native container types (`NativeList<T>`, `NativeHashMap<K,V>`, etc.) |
-| **Mathematics** | **Core Package** | Burst-optimized `float3`, `quaternion`, `int4`, etc. |
+| **Mathematics** | DOTS dependency (`com.unity.mathematics` 1.4.x) | Burst-optimized `float3`, `quaternion`, `int4`, etc. |
 | **Entities Graphics** | **Core Package** | Renders entity-based graphics through the SRP |
 | **Netcode for Entities** | **Core Package** (6.5) | Client-server networking for entities |
-| **Unity Physics** | Package Manager | Stateless, deterministic physics for entities |
+| **Unity Physics** | **Core Package** (6.5) | Stateless, deterministic physics for entities |
 | **Character Controller** | Package Manager | ECS-based character controller |
-| **Burst Compiler** | Built-in engine feature | Compiles jobs and systems to tight native code |
+| **Burst Compiler** | Package/tooling dependency | Compiles jobs and systems to tight native code |
 | **Job System** | Built-in engine feature | Multithreaded job scheduling |
 
-> Note: Job System and Burst were never UPM packages — they are part of the Engine. The shift in 6000.4 is specifically about the *DOTS packages on top of them*.
+> Note: The Job System is engine-level. Burst remains package/tooling surfaced through Unity's package system, even though DOTS packages depend on it and Unity 6000.x controls the compatible version set.
 
 ---
 
@@ -77,7 +77,7 @@ See [`Changelog/Entities 1.4 → 6.5 Key Changes.md`](../Changelog/Entities 1.4 
 
 ### `manifest.json`
 
-No `com.unity.entities`, `com.unity.collections`, `com.unity.mathematics`, or `com.unity.entities.graphics` entries are needed. If you upgrade a 1.x project, you remove them — see [`Migration/02_Package Manager → Core Package.md`](../Migration/02_Package Manager → Core Package.md).
+No `com.unity.entities`, `com.unity.collections`, `com.unity.entities.graphics`, `com.unity.physics`, or `com.unity.netcode` entries are needed on the matching Core Package Editor versions. Avoid direct `com.unity.mathematics` pins unless your project has a specific reason to override the Editor/package-set version. If you upgrade a 1.x project, see [`Migration/02_Package Manager → Core Package.md`](../Migration/02_Package Manager → Core Package.md).
 
 ### `packages-lock.json`
 

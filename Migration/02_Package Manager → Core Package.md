@@ -1,6 +1,6 @@
 ---
 title: Package Manager → Core Package
-updated: 2026-04-27
+updated: 2026-04-28
 folder: Migration
 ---
 
@@ -29,19 +29,20 @@ Moved to **Core Package** status on 6000.4+:
 |-----------------|-------|
 | `com.unity.entities` | Core Package, ships with Editor |
 | `com.unity.collections` | Core Package |
-| `com.unity.mathematics` | Core Package |
 | `com.unity.entities.graphics` | Core Package |
+| `com.unity.physics` | Core Package in 6.5 |
 | `com.unity.netcode` (Netcode for Entities) | Core Package in 6.5 |
 
 Stay **on Package Manager**:
 
-- `com.unity.physics` (Unity Physics)
 - `com.unity.charactercontroller` (Character Controller)
 
-Built into the engine (unchanged):
+`com.unity.mathematics` is still a DOTS dependency, but the 6000.5 package set uses the 1.4.x line rather than a 6.x Core Package changelog entry. Remove direct old math pins only when they were added to satisfy the old DOTS package graph.
+
+Engine-level or tooling dependencies (unchanged):
 
 - Jobs system
-- Burst (`com.unity.burst` is still exposed as a UPM entry in some setups, but on 6000.4+ it's tied to the Editor version; safest to leave manifest as-is).
+- Burst (`com.unity.burst` is still exposed through the package system; safest to leave manifest changes to the Editor/package resolver unless you deliberately pinned it).
 
 ---
 
@@ -64,24 +65,23 @@ Open `Packages/manifest.json`. It looks something like:
 }
 ```
 
-Remove the five lines that are now Core Packages:
+Remove the lines that are now Core Packages:
 
 ```diff
  {
    "dependencies": {
 -    "com.unity.entities": "1.4.2",
 -    "com.unity.collections": "2.4.5",
--    "com.unity.mathematics": "1.3.2",
 -    "com.unity.entities.graphics": "1.4.2",
 -    "com.unity.netcode": "1.12.0",
-     "com.unity.physics": "1.3.14",
+-    "com.unity.physics": "1.3.14",
      "com.unity.render-pipelines.universal": "17.0.4",
      ...
    }
  }
 ```
 
-Leave `com.unity.physics` and anything else that is still UPM.
+Leave `com.unity.charactercontroller`, render pipelines, and anything else that is still UPM. Remove the direct `com.unity.mathematics` line only if it was an old DOTS pin and the regenerated package graph supplies the correct 1.4.x package.
 
 Save the file.
 
@@ -116,7 +116,7 @@ Note the `"source": "builtin"` — that's the tell that the package is now a Cor
 
 ## 5. Verifying the result
 
-1. **Package Manager window** (`Window → Package Manager` → "In Project") — Entities, Collections, Mathematics, Entities Graphics (and Netcode for Entities if you use it) should appear tagged **Built-in**.
+1. **Package Manager window** (`Window → Package Manager` → "In Project") — Entities, Collections, Entities Graphics, Unity Physics, and Netcode for Entities should appear tagged **Built-in** on their matching Core Package Editor versions.
 2. **Editor menus** — `Window → Entities → Hierarchy/Systems/Archetypes` exist and work.
 3. **Compile** — press Play; the project should enter Play mode with no compile errors referencing missing assemblies.
 
@@ -130,6 +130,6 @@ Note the `"source": "builtin"` — that's the tell that the package is now a Cor
 | `The type or namespace Unity.Entities could not be found` | You're on an Editor older than 6000.4 — Core Package isn't available. Upgrade Editor, or add the UPM package back. |
 | Package Manager shows both Built-in and UPM Entities | Manifest still has `com.unity.entities` entry. Remove it. |
 | Third-party asset won't compile because it pins `com.unity.entities@1.x` | The asset needs updating. Either wait, fork, or stay on the 1.x line for this project. |
-| Unity Physics breaks because it wanted a specific Entities version | Upgrade Unity Physics to a version compatible with Entities 6.5. Check the package's changelog on docs.unity3d.com. |
+| Unity Physics appears as an old UPM package | On Unity 6000.5+, Unity Physics 6.5 is a Core Package. Remove stale `com.unity.physics` pins and regenerate package resolution. |
 | `packages-lock.json` regeneration fails | Network issue or a pinned private registry. Check Editor logs for the specific resolution failure. |
 | Netcode for Entities still appears as UPM | On 6000.5+, Netcode 6.5 is Built-in. If `com.unity.netcode` is still in manifest, remove it and regenerate. |

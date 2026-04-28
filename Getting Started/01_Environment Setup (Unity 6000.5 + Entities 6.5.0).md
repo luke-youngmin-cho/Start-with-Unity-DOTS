@@ -1,6 +1,6 @@
 ---
 title: Environment Setup — Unity 6000.5 + Entities 6.5.0
-updated: 2026-04-21
+updated: 2026-04-28
 folder: Getting Started
 ---
 
@@ -13,7 +13,7 @@ folder: Getting Started
 
 From **Unity 6000.4+**, Entities is a **Core Package** — it ships inside the Editor and does not need to be added through the Package Manager. This guide walks through installing the Editor, creating a DOTS-ready project, and confirming that Entities is active.
 
-> **Project Environment reference:** Unity 6000.5.0b2 · Entities 6.5.0 · Collections / Mathematics / Entities Graphics (all Core Packages).
+> **Project Environment reference:** Unity 6000.5.0b2 · Entities 6.5.0 · Collections / Entities Graphics / Unity Physics (Core Packages) · Mathematics 1.4.x.
 
 ---
 
@@ -50,8 +50,10 @@ Open **Window → Package Manager** and switch the scope to **In Project**. You 
 
 - **Entities**
 - **Collections**
-- **Mathematics**
 - **Entities Graphics**
+- **Unity Physics** (if your Editor/package set includes the 6.5 DOTS physics package)
+
+`Unity.Mathematics` is still used throughout DOTS code examples, but its 6000.5 package-set entry is `com.unity.mathematics` 1.4.x rather than a 6.x Core Package changelog entry.
 
 If you prefer to verify via files, check `Packages/manifest.json`: there is **no** `com.unity.entities` entry because it ships with the Editor.
 

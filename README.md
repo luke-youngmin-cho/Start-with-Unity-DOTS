@@ -2,7 +2,7 @@
 
 A community manual for **Unity DOTS** (Data-Oriented Technology Stack) — concepts, workflows, Netcode for Entities, optimizations, and 1.x → 6.5 migration. Targets **Entities 6.5.0** and **Netcode for Entities 6.5.0** on **Unity 6000.5+**.
 
-> **Project Environment:** Unity **6000.5.0b2** · Entities **6.5.0** · Netcode for Entities **6.5.0** · Collections / Mathematics / Entities Graphics (Core Packages)
+> **Project Environment:** Unity **6000.5.0b2** · Entities **6.5.0** · Netcode for Entities **6.5.0** · Collections / Entities Graphics / Unity Physics (Core Packages) · Mathematics 1.4.x
 
 > Looking for the older Entities 1.4 version of this manual? See the [`legacy/entities-1.4`](https://github.com/luke-youngmin-cho/unity-dots-manual/tree/legacy/entities-1.4) branch.
 

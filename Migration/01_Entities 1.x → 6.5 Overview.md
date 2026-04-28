@@ -1,6 +1,6 @@
 ---
 title: Entities 1.x → 6.5 Overview
-updated: 2026-04-27
+updated: 2026-04-28
 folder: Migration
 ---
 
@@ -99,9 +99,10 @@ Non-negotiable before starting:
 - Let the initial import finish; expect warnings about deprecated APIs and missing packages. That's what the next steps fix.
 
 ### 6.2 Package cleanup → [`02_Package Manager → Core Package.md`](02_Package Manager → Core Package.md)
-- Remove `com.unity.entities`, `com.unity.collections`, `com.unity.mathematics`, `com.unity.entities.graphics` from `manifest.json`.
+- Remove `com.unity.entities`, `com.unity.collections`, `com.unity.entities.graphics`, and matching 6.x Core Package entries such as `com.unity.physics` from `manifest.json`.
 - Delete `packages-lock.json` and let the Editor regenerate.
 - Also remove Netcode for Entities if your project uses it (6.5 is a Core Package version).
+- Remove direct `com.unity.mathematics` pins only if they were added for the old DOTS package set; Unity 6000.5 uses the 1.4.x math package line rather than a 6.x Core Package entry.
 
 ### 6.3 Managed object references → [`03_Managed Object References → UnityObjectRef.md`](03_Managed Object References → UnityObjectRef.md)
 - Audit ECS-facing code for managed Unity object fields.
